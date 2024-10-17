@@ -1,8 +1,8 @@
 INGPO BANG DAN JEPEH
 ## Installation
-You can download the [**repository**](https://github.com/Aurincho/yww.git)
+You can download the [**repository**](https://github.com/erwindobp98/W-UW.git)
 ```shell
-git clone https://github.com/Aurincho/yww.git
+git clone https://github.com/erwindobp98/W-UW.git
 ```
 ```shell
 cd yww
