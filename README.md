@@ -5,7 +5,7 @@ You can download the [**repository**](https://github.com/erwindobp98/W-UW.git)
 git clone https://github.com/erwindobp98/W-UW.git
 ```
 ```shell
-cd yww
+cd W-UW
 ```
 Edit Private Key dan Address No 12,13 di File bot.py
 
@@ -18,5 +18,6 @@ pip install web3
 ```
 Run
 ```shell
-python bot.py
+python taiko1.py
+python taiko2.py
 ```
