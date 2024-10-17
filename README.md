@@ -7,11 +7,11 @@ git clone https://github.com/erwindobp98/W-UW.git
 ```shell
 cd W-UW
 ```
-Edit Private Key dan Address No 12,13 di File bot.py
+Edit Private Key dan Address No 12,13 di File taiko2.py
 
 Edit nilai Swap, Gwei No 51,52
 
-*** Transaksi kalau mau di Edit No 165,171 (Default 100 TX 50 wrap 50 unwrap)
+*** Transaksi kalau mau di Edit No 165,171 (Default 82 TX 41 wrap 41 unwrap)
 
 ```shell
 pip install web3
