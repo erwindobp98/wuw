@@ -50,7 +50,7 @@ weth_contract = web3.eth.contract(address=weth_contract_address, abi=weth_abi)
 
 amount_in_wei = web3.to_wei(0.000013, 'ether') # Nilai Swap
 
-gas_price_gwei = 0.14 # Nilai Gwei
+gas_price_gwei = 0.18 # Nilai Gwei
 max_priority_fee_per_gas = web3.to_wei(gas_price_gwei, 'gwei')
 max_fee_per_gas = web3.to_wei(gas_price_gwei, 'gwei')
 
@@ -161,20 +161,20 @@ wrap_counter = 0
 unwrap_counter = 0
 total_tx = 0
 
-while total_tx < 82:
-    if wrap_counter < 41 and total_tx < 82:
+while total_tx < 74:
+    if wrap_counter < 37 and total_tx < 74:
         if wrap_eth_to_weth(amount_in_wei):
             wrap_counter += 1
             total_tx += 1
             print(f"Total Transaksi: {total_tx} (Wrapping: {wrap_counter})")
     
-    if unwrap_counter < 41 and total_tx < 82:
+    if unwrap_counter < 37 and total_tx < 74:
         if unwrap_weth_to_eth(amount_in_wei):
             unwrap_counter += 1
             total_tx += 1
             print(f"Total Transaksi: {total_tx} (Unwrapping: {unwrap_counter})")
 
-    if total_tx >= 82:
+    if total_tx >= 74:
         break
 
     time.sleep(10)
