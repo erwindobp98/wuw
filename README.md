@@ -1,8 +1,8 @@
 INGPO BANG DAN JEPEH
 ## Installation
-You can download the [**repository**](https://github.com/erwindobp98/W-UW.git)
+You can download the [**repository**](https://github.com/erwindobp98/w-uw.git)
 ```shell
-git clone https://github.com/erwindobp98/W-UW.git
+git clone https://github.com/erwindobp98/w-uw.git
 ```
 ```shell
 cd W-UW
