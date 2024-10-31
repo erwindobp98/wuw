@@ -18,6 +18,5 @@ pip install web3
 ```
 Run
 ```shell
-python taiko1.py
-python taiko2.py
+python taiko.py
 ```
