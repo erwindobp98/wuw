@@ -53,10 +53,14 @@ weth_abi = '''
 
 weth_contract = web3.eth.contract(address=weth_contract_address, abi=weth_abi)
 
-amount_in_wei = web3.to_wei(0.026971, 'ether')  # Amount to swap
 gas_price_gwei = 0.18  # Gas price in Gwei
 max_priority_fee_per_gas = web3.to_wei(gas_price_gwei, 'gwei')
 max_fee_per_gas = web3.to_wei(gas_price_gwei, 'gwei')
+
+
+def get_random_amount():
+    """Generate a random amount between 0.000012 and 0.000013 WETH."""
+    return web3.to_wei(random.uniform(0.0000012, 0.0000121), 'ether')
 
 
 def check_eth_balance():
@@ -125,10 +129,13 @@ def wait_for_confirmation(tx_hash, timeout=300):
     return False
 
 
-def wrap_eth_to_weth(amount_in_wei):
+def wrap_eth_to_weth():
+    amount_in_wei = get_random_amount()  # Get a random amount for wrapping
     if not has_sufficient_balance(amount_in_wei, is_wrap=True):
         print("Waiting for sufficient ETH balance...")
         return False
+
+    print(f"Preparing to wrap: {web3.from_wei(amount_in_wei, 'ether')} ETH to WETH")
 
     nonce = get_next_nonce()
     gas_estimate = weth_contract.functions.deposit(amount_in_wei).estimate_gas({'from': my_address, 'value': amount_in_wei})
@@ -146,7 +153,7 @@ def wrap_eth_to_weth(amount_in_wei):
     signed_txn = web3.eth.account.sign_transaction(transaction, private_key)
     try:
         tx_hash = web3.eth.send_raw_transaction(signed_txn.raw_transaction)
-        print(f"Transaction sent: Wrapping ETH to WETH | Tx Hash: {web3.to_hex(tx_hash)} | Network: Taiko")
+        print(f"Transaction sent: Wrapping ETH to WETH | Amount: {web3.from_wei(amount_in_wei, 'ether')} WETH | Tx Hash: {web3.to_hex(tx_hash)} | Network: Taiko")
         if wait_for_confirmation(tx_hash):
             return True
     except Exception as e:
@@ -154,10 +161,13 @@ def wrap_eth_to_weth(amount_in_wei):
     return False
 
 
-def unwrap_weth_to_eth(amount_in_wei):
+def unwrap_weth_to_eth():
+    amount_in_wei = get_random_amount()  # Get a random amount for unwrapping
     if not has_sufficient_balance(amount_in_wei, is_wrap=False):
         print("Waiting for sufficient WETH balance...")
         return False
+
+    print(f"Preparing to unwrap: {web3.from_wei(amount_in_wei, 'ether')} WETH to ETH")
 
     nonce = get_next_nonce()
     gas_estimate = weth_contract.functions.withdraw(amount_in_wei).estimate_gas({'from': my_address})
@@ -174,7 +184,7 @@ def unwrap_weth_to_eth(amount_in_wei):
     signed_txn = web3.eth.account.sign_transaction(transaction, private_key)
     try:
         tx_hash = web3.eth.send_raw_transaction(signed_txn.raw_transaction)
-        print(f"Transaction sent: Unwrapping WETH to ETH | Tx Hash: {web3.to_hex(tx_hash)} | Network: Taiko")
+        print(f"Transaction sent: Unwrapping WETH to ETH | Amount: {web3.from_wei(amount_in_wei, 'ether')} ETH | Tx Hash: {web3.to_hex(tx_hash)} | Network: Taiko")
         if wait_for_confirmation(tx_hash):
             return True
     except Exception as e:
@@ -190,8 +200,8 @@ while total_tx < 74:
     eth_balance = check_weth_balance()
 
     # Unwrap WETH to ETH
-    if unwrap_counter < 37 and total_tx < 74:
-        if unwrap_weth_to_eth(amount_in_wei):
+    if unwrap_counter < 74 and total_tx < 74:
+        if unwrap_weth_to_eth():
             unwrap_counter += 1
             total_tx += 1
             print(f"Total Transactions: {total_tx} (Unwrapping: {unwrap_counter})")
@@ -202,3 +212,4 @@ while total_tx < 74:
     time.sleep(sleep_time)
 
 print(f"Completed. Total Transactions: {total_tx} (Wrapping: {wrap_counter}, Unwrapping: {unwrap_counter})")
+
