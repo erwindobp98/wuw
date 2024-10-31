@@ -13,7 +13,7 @@ if not web3.is_connected():
     exit()
 
 # Replace with your actual private key and address
-private_key = "isi private key"  # Ganti dengan private key
+private_key = "isi peivate key"  # Ganti dengan private key
 my_address = Web3.to_checksum_address("isi address")  # Alamat dompet Anda
 
 weth_contract_address = Web3.to_checksum_address("0xA51894664A773981C6C112C43ce576f315d5b1B6")
@@ -187,8 +187,7 @@ unwrap_counter = 0
 total_tx = 0
 
 while total_tx < 74:
-    eth_balance = check_eth_balance()
-    weth_balance = check_weth_balance()
+    eth_balance = check_weth_balance()
 
     # Wrap ETH to WETH
     if wrap_counter < 37 and total_tx < 74:
@@ -201,6 +200,8 @@ while total_tx < 74:
     sleep_time = random.uniform(10, 20)
     print(f"Sleeping for {sleep_time:.2f} seconds before the next transaction.")
     time.sleep(sleep_time)
+
+    weth_balance = check_eth_balance()
 
     # Unwrap WETH to ETH
     if unwrap_counter < 37 and total_tx < 74:
