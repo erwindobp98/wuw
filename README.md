@@ -14,7 +14,7 @@ cd wuw
 ```
 Edit Private Key dan Address 
 Edit nilai Swap, Gwei
-Transaksi kalau mau di Edit No 186,187,193,199 (Default 74 TX 37 wrap 37 unwrap)
+Transaksi kalau mau di Edit  (Default 74 TX 37 wrap 37 unwrap)
 ```shell
 nano taiko1.py
 ```
