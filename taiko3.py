@@ -13,8 +13,8 @@ if not web3.is_connected():
     exit()
 
 # Replace with your actual private key and address
-private_key = ""  # Ganti dengan private key
-my_address = Web3.to_checksum_address("")  # Alamat dompet Anda
+private_key = "isi private key"  # Ganti dengan private key
+my_address = Web3.to_checksum_address("isi address")  # Alamat dompet Anda
 
 weth_contract_address = Web3.to_checksum_address("0xA51894664A773981C6C112C43ce576f315d5b1B6")
 
@@ -59,8 +59,8 @@ max_fee_per_gas = web3.to_wei(gas_price_gwei, 'gwei')
 
 
 def get_random_amount():
-    """Generate a random amount between 0.01 and 0.1 WETH."""
-    return web3.to_wei(random.uniform(0.022, 0.024), 'ether')
+    """Generate a random amount between 0.01 and 0.011 WETH."""
+    return web3.to_wei(random.uniform(0.02309, 0.024), 'ether')
 
 
 def check_eth_balance():
