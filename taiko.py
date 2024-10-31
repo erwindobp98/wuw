@@ -3,6 +3,7 @@ import time
 import os
 import random
 
+# Connect to Taiko RPC
 taiko_rpc_url = "https://rpc.ankr.com/taiko"
 web3 = Web3(Web3.HTTPProvider(taiko_rpc_url))
 
@@ -11,11 +12,13 @@ if not web3.is_connected():
     print("Tidak dapat terhubung ke jaringan Taiko.")
     exit()
 
+# Replace with your actual private key and address
 private_key = "isi private key"  # Ganti dengan private key
 my_address = Web3.to_checksum_address("isi address")  # Alamat dompet Anda
 
 weth_contract_address = Web3.to_checksum_address("0xA51894664A773981C6C112C43ce576f315d5b1B6")
 
+# WETH contract ABI
 weth_abi = '''
 [
     {
@@ -50,21 +53,23 @@ weth_abi = '''
 
 weth_contract = web3.eth.contract(address=weth_contract_address, abi=weth_abi)
 
-amount_in_wei = web3.to_wei(0.026971, 'ether')  # Nilai Swap
-gas_price_gwei = 0.18  # Nilai Gwei
+amount_in_wei = web3.to_wei(0.026971, 'ether')  # Amount to swap
+gas_price_gwei = 0.18  # Gas price in Gwei
 max_priority_fee_per_gas = web3.to_wei(gas_price_gwei, 'gwei')
 max_fee_per_gas = web3.to_wei(gas_price_gwei, 'gwei')
 
 
 def check_eth_balance():
     balance = web3.eth.get_balance(my_address)
-    print(f"Saldo ETH: {web3.from_wei(balance, 'ether')} ETH")
+    eth_balance = web3.from_wei(balance, 'ether')
+    print(f"Saldo ETH: {eth_balance:.6f} ETH")
     return balance
 
 
 def check_weth_balance():
     balance = weth_contract.functions.balanceOf(my_address).call()
-    print(f"Saldo WETH: {web3.from_wei(balance, 'ether')} WETH")
+    weth_balance = web3.from_wei(balance, 'ether')
+    print(f"Saldo WETH: {weth_balance:.6f} WETH")
     return balance
 
 
@@ -115,9 +120,7 @@ def wait_for_confirmation(tx_hash, timeout=300):
                     return False
         except Exception:
             pass
-        time.sleep(30)
-    print(f"Sleeping for {sleep.time} seconds before next transaction.")
-    
+        time.sleep(30)  # Wait before checking again
     print(f"Timeout waiting for confirmation for Tx Hash: {web3.to_hex(tx_hash)}")
     return False
 
@@ -137,7 +140,7 @@ def wrap_eth_to_weth(amount_in_wei):
         'maxPriorityFeePerGas': max_priority_fee_per_gas,
         'nonce': nonce,
         'value': amount_in_wei,
-        'data': '0xd0e30db0'
+        'data': '0xd0e30db0'  # Deposit function signature
     }
 
     signed_txn = web3.eth.account.sign_transaction(transaction, private_key)
@@ -165,7 +168,7 @@ def unwrap_weth_to_eth(amount_in_wei):
         'maxFeePerGas': max_fee_per_gas,
         'maxPriorityFeePerGas': max_priority_fee_per_gas,
         'nonce': nonce,
-        'data': '0x2e1a7d4d' + amount_in_wei.to_bytes(32, 'big').hex()
+        'data': '0x2e1a7d4d' + amount_in_wei.to_bytes(32, 'big').hex()  # Withdraw function signature
     }
 
     signed_txn = web3.eth.account.sign_transaction(transaction, private_key)
@@ -184,17 +187,31 @@ unwrap_counter = 0
 total_tx = 0
 
 while total_tx < 74:
+    eth_balance = check_eth_balance()
+    weth_balance = check_weth_balance()
+
+    # Wrap ETH to WETH
     if wrap_counter < 37 and total_tx < 74:
         if wrap_eth_to_weth(amount_in_wei):
             wrap_counter += 1
             total_tx += 1
             print(f"Total Transactions: {total_tx} (Wrapping: {wrap_counter})")
 
+# Optional: Sleep for a random duration between transactions
+    sleep_time = random.uniform(10, 20)
+    print(f"Sleeping for {sleep_time:.2f} seconds before the next transaction.")
+    time.sleep(sleep_time)
+
+    # Unwrap WETH to ETH
     if unwrap_counter < 37 and total_tx < 74:
         if unwrap_weth_to_eth(amount_in_wei):
             unwrap_counter += 1
             total_tx += 1
             print(f"Total Transactions: {total_tx} (Unwrapping: {unwrap_counter})")
 
-    if total_tx >= 74:
-        break
+    # Optional: Sleep for a random duration between transactions
+    sleep_time = random.uniform(10, 20)
+    print(f"Sleeping for {sleep_time:.2f} seconds before the next transaction.")
+    time.sleep(sleep_time)
+
+print(f"Completed. Total Transactions: {total_tx} (Wrapping: {wrap_counter}, Unwrapping: {unwrap_counter})")
