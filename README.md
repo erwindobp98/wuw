@@ -1,13 +1,7 @@
-INGPO
-```
-```
-taiko1 unwrap random time sleep, random amount
-```
-```
-taiko2 wrap, unwrap random time sleep, single amount
-```
-```
-taiko3 wrap, unwrap random time sleep, random amount
+## INGPO
+## taiko1 unwrap random time sleep, random amount
+## taiko2 wrap, unwrap random time sleep, single amount
+## taiko3 wrap, unwrap random time sleep, random amount
 
 
 ## Installation
@@ -18,37 +12,33 @@ git clone https://github.com/erwindobp98/wuw.git
 ```shell
 cd wuw
 ```
-Edit Private Key dan Address
-```
-```
-Edit nilai Swap, Gwei
-```
-```
-Transaksi kalau mau di Edit  (Default 74 TX 37 wrap 37 unwrap)
+## Edit Private Key dan Address
+## Edit nilai Swap, Gwei
+## Transaksi kalau mau di Edit  (Default 74 TX 37 wrap 37 unwrap)
 ```shell
 nano taiko1.py
 ```
-Or
+## Or
 ```shell
 nano taiko2.py
 ```
-Or
+## Or
 ```shell
 nano taiko3.py
 ```
-Next
+## Next
 ```shell
 pip install web3
 ```
-Run taiko1 unwrap random time sleep, random amount
+## Run taiko1 unwrap random time sleep, random amount
 ```shell
 python taiko1.py
 ```
-Run taiko2 wrap, unwrap random time sleep, single amount
+## Run taiko2 wrap, unwrap random time sleep, single amount
 ```shell
 python taiko2.py
 ```
-Run taiko3 wrap, unwrap random time sleep, random amount
+## Run taiko3 wrap, unwrap random time sleep, random amount
 ```shell
 pyton taiko3.py
 ```
