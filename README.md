@@ -1,11 +1,11 @@
 INGPO BANG DAN JEPEH
 ## Installation
-You can download the [**repository**](https://github.com/erwindobp98/w-uw.git)
+You can download the [**repository**](https://github.com/erwindobp98/wuw.git)
 ```shell
-git clone https://github.com/erwindobp98/w-uw.git
+git clone https://github.com/erwindobp98/wuw.git
 ```
 ```shell
-cd W-UW
+cd wuw
 ```
 Edit Private Key dan Address No 12,13 di File taiko2.py
 
