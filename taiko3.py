@@ -2,6 +2,16 @@ from web3 import Web3
 import time
 import os
 import random
+from colorama import init, Fore, Style
+
+# Initialize colorama
+init(autoreset=True)
+
+# Define a custom pink color using ANSI escape codes
+PINK = "\033[38;5;206m"  # ANSI code for a pink-like color
+
+# Print "         BY PUCUK KANGKUNG        " in pink
+print(PINK + "BY PUCUK KANGKUNG" + Style.RESET_ALL)  # Print in pink and reset
 
 # Connect to Taiko RPC
 taiko_rpc_url = "https://rpc.ankr.com/taiko"
@@ -9,7 +19,7 @@ web3 = Web3(Web3.HTTPProvider(taiko_rpc_url))
 
 # Check network connection
 if not web3.is_connected():
-    print("Tidak dapat terhubung ke jaringan Taiko.")
+    print(Fore.RED + "Tidak dapat terhubung ke jaringan Taiko." + Style.RESET_ALL)  # Red
     exit()
 
 # Replace with your actual private key and address
@@ -57,29 +67,24 @@ gas_price_gwei = 0.18  # Gas price in Gwei
 max_priority_fee_per_gas = web3.to_wei(gas_price_gwei, 'gwei')
 max_fee_per_gas = web3.to_wei(gas_price_gwei, 'gwei')
 
-
 def get_random_amount():
     """Generate a random amount between 0.01 and 0.011 WETH."""
     return web3.to_wei(random.uniform(0.02309, 0.024), 'ether')
 
-
 def check_eth_balance():
     balance = web3.eth.get_balance(my_address)
     eth_balance = web3.from_wei(balance, 'ether')
-    print(f"Saldo ETH: {eth_balance:.6f} ETH")
+    print(Fore.BLUE + f"Saldo ETH: {eth_balance:.6f} ETH" + Style.RESET_ALL)  # Blue
     return balance
-
 
 def check_weth_balance():
     balance = weth_contract.functions.balanceOf(my_address).call()
     weth_balance = web3.from_wei(balance, 'ether')
-    print(f"Saldo WETH: {weth_balance:.6f} WETH")
+    print(Fore.BLUE + f"Saldo WETH: {weth_balance:.6f} WETH" + Style.RESET_ALL)  # Blue
     return balance
-
 
 def get_next_nonce():
     return web3.eth.get_transaction_count(my_address)
-
 
 def has_sufficient_balance(amount_in_wei, is_wrap=True):
     try:
@@ -92,22 +97,21 @@ def has_sufficient_balance(amount_in_wei, is_wrap=True):
         if is_wrap:
             eth_balance = check_eth_balance()
             if eth_balance >= total_cost:
-                print(f"Sufficient ETH Balance. Required: {web3.from_wei(total_cost, 'ether')} ETH")
+                print(Fore.GREEN + f"Sufficient ETH Balance. Required: {web3.from_wei(total_cost, 'ether')} ETH" + Style.RESET_ALL)  # Green
                 return True
             else:
-                print(f"Insufficient funds. Balance: {web3.from_wei(eth_balance, 'ether')} ETH, Required: {web3.from_wei(total_cost, 'ether')} ETH")
+                print(Fore.YELLOW + f"Insufficient funds. Balance: {web3.from_wei(eth_balance, 'ether')} ETH, Required: {web3.from_wei(total_cost, 'ether')} ETH" + Style.RESET_ALL)  # Yellow
         else:
             weth_balance = check_weth_balance()
             if weth_balance >= amount_in_wei:
-                print(f"Sufficient WETH Balance. Required: {web3.from_wei(amount_in_wei, 'ether')} WETH")
+                print(Fore.GREEN + f"Sufficient WETH Balance. Required: {web3.from_wei(amount_in_wei, 'ether')} WETH" + Style.RESET_ALL)  # Green
                 return True
             else:
-                print(f"Insufficient funds. Balance: {web3.from_wei(weth_balance, 'ether')} WETH, Required: {web3.from_wei(amount_in_wei, 'ether')} WETH")
+                print(Fore.YELLOW + f"Insufficient funds. Balance: {web3.from_wei(weth_balance, 'ether')} WETH, Required: {web3.from_wei(amount_in_wei, 'ether')} WETH" + Style.RESET_ALL)  # Yellow
         return False
     except Exception as e:
-        print(f"Error estimating gas: {e}")
+        print(Fore.RED + f"Error estimating gas: {e}" + Style.RESET_ALL)  # Red
         return False
-
 
 def wait_for_confirmation(tx_hash, timeout=300):
     start_time = time.time()
@@ -116,26 +120,25 @@ def wait_for_confirmation(tx_hash, timeout=300):
             receipt = web3.eth.get_transaction_receipt(tx_hash)
             if receipt:
                 if receipt['status'] == 1:
-                    print(f"Transaction Successful | Tx Hash: {web3.to_hex(tx_hash)} | Network: Taiko")
+                    print(Fore.GREEN + f"Transaction Successful | Tx Hash: {web3.to_hex(tx_hash)} | Network: Taiko" + Style.RESET_ALL)  # Green
                     print(f"Transaction execution time: {int(time.time() - start_time)} seconds")
                     return True
                 else:
-                    print(f"Transaction Failed | Tx Hash: {web3.to_hex(tx_hash)}")
+                    print(Fore.RED + f"Transaction Failed | Tx Hash: {web3.to_hex(tx_hash)}" + Style.RESET_ALL)  # Red
                     return False
         except Exception:
             pass
         time.sleep(30)  # Wait before checking again
-    print(f"Timeout waiting for confirmation for Tx Hash: {web3.to_hex(tx_hash)}")
+    print(Fore.RED + f"Timeout waiting for confirmation for Tx Hash: {web3.to_hex(tx_hash)}" + Style.RESET_ALL)  # Red
     return False
-
 
 def wrap_eth_to_weth():
     amount_in_wei = get_random_amount()  # Get a random amount for wrapping
     if not has_sufficient_balance(amount_in_wei, is_wrap=True):
-        print("Waiting for sufficient ETH balance...")
+        print(Fore.YELLOW + "Waiting for sufficient ETH balance..." + Style.RESET_ALL)  # Yellow
         return False
 
-    print(f"Preparing to wrap: {web3.from_wei(amount_in_wei, 'ether')} ETH to WETH")
+    print(Fore.BLUE + f"Preparing to wrap: {web3.from_wei(amount_in_wei, 'ether')} ETH to WETH" + Style.RESET_ALL)  # Blue
 
     nonce = get_next_nonce()
     gas_estimate = weth_contract.functions.deposit(amount_in_wei).estimate_gas({'from': my_address, 'value': amount_in_wei})
@@ -153,21 +156,20 @@ def wrap_eth_to_weth():
     signed_txn = web3.eth.account.sign_transaction(transaction, private_key)
     try:
         tx_hash = web3.eth.send_raw_transaction(signed_txn.raw_transaction)
-        print(f"Transaction sent: Wrapping ETH to WETH | Amount: {web3.from_wei(amount_in_wei, 'ether')} WETH | Tx Hash: {web3.to_hex(tx_hash)} | Network: Taiko")
+        print(Fore.BLUE + f"Transaction sent: Wrapping ETH to WETH | Amount: {web3.from_wei(amount_in_wei, 'ether')} WETH | Tx Hash: {web3.to_hex(tx_hash)} | Network: Taiko" + Style.RESET_ALL)  # Blue
         if wait_for_confirmation(tx_hash):
             return True
     except Exception as e:
-        print(f"Transaction error: {e}")
+        print(Fore.RED + f"Transaction error: {e}" + Style.RESET_ALL)  # Red
     return False
-
 
 def unwrap_weth_to_eth():
     amount_in_wei = get_random_amount()  # Get a random amount for unwrapping
     if not has_sufficient_balance(amount_in_wei, is_wrap=False):
-        print("Waiting for sufficient WETH balance...")
+        print(Fore.YELLOW + "Waiting for sufficient WETH balance..." + Style.RESET_ALL)  # Yellow
         return False
 
-    print(f"Preparing to unwrap: {web3.from_wei(amount_in_wei, 'ether')} WETH to ETH")
+    print(Fore.BLUE + f"Preparing to unwrap: {web3.from_wei(amount_in_wei, 'ether')} WETH to ETH" + Style.RESET_ALL)  # Blue
 
     nonce = get_next_nonce()
     gas_estimate = weth_contract.functions.withdraw(amount_in_wei).estimate_gas({'from': my_address})
@@ -184,13 +186,12 @@ def unwrap_weth_to_eth():
     signed_txn = web3.eth.account.sign_transaction(transaction, private_key)
     try:
         tx_hash = web3.eth.send_raw_transaction(signed_txn.raw_transaction)
-        print(f"Transaction sent: Unwrapping WETH to ETH | Amount: {web3.from_wei(amount_in_wei, 'ether')} ETH | Tx Hash: {web3.to_hex(tx_hash)} | Network: Taiko")
+        print(Fore.BLUE + f"Transaction sent: Unwrapping WETH to ETH | Amount: {web3.from_wei(amount_in_wei, 'ether')} ETH | Tx Hash: {web3.to_hex(tx_hash)} | Network: Taiko" + Style.RESET_ALL)  # Blue
         if wait_for_confirmation(tx_hash):
             return True
     except Exception as e:
-        print(f"Transaction error: {e}")
+        print(Fore.RED + f"Transaction error: {e}" + Style.RESET_ALL)  # Red
     return False
-
 
 wrap_counter = 0
 unwrap_counter = 0
@@ -204,11 +205,11 @@ while total_tx < 74:
         if wrap_eth_to_weth():
             wrap_counter += 1
             total_tx += 1
-            print(f"Total Transactions: {total_tx} (Wrapping: {wrap_counter})")
+            print(Fore.BLUE + f"Total Transactions: {total_tx} (Wrapping: {wrap_counter})" + Style.RESET_ALL)  # Blue
 
     # Optional: Sleep for a random duration between transactions
     sleep_time = random.uniform(10, 20)
-    print(f"Sleeping for {sleep_time:.2f} seconds before the next transaction.")
+    print(Fore.BLUE + f"Sleeping for {sleep_time:.2f} seconds before the next transaction." + Style.RESET_ALL)  # Blue
     time.sleep(sleep_time)
 
     weth_balance = check_eth_balance()
@@ -218,11 +219,14 @@ while total_tx < 74:
         if unwrap_weth_to_eth():
             unwrap_counter += 1
             total_tx += 1
-            print(f"Total Transactions: {total_tx} (Unwrapping: {unwrap_counter})")
+            print(Fore.BLUE + f"Total Transactions: {total_tx} (Unwrapping: {unwrap_counter})" + Style.RESET_ALL)  # Blue
 
     # Optional: Sleep for a random duration between transactions
     sleep_time = random.uniform(10, 20)
-    print(f"Sleeping for {sleep_time:.2f} seconds before the next transaction.")
+    print(Fore.BLUE + f"Sleeping for {sleep_time:.2f} seconds before the next transaction." + Style.RESET_ALL)  # Blue
     time.sleep(sleep_time)
+
+print(Fore.GREEN + f"Completed. Total Transactions: {total_tx} (Wrapping: {wrap_counter}, Unwrapping: {unwrap_counter})" + Style.RESET_ALL)  # Green
+
 
 print(f"Completed. Total Transactions: {total_tx} (Wrapping: {wrap_counter}, Unwrapping: {unwrap_counter})")
