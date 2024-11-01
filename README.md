@@ -40,5 +40,5 @@ python taiko2.py
 ```
 ## Run taiko3 wrap, unwrap random time sleep, random amount
 ```shell
-pyton taiko3.py
+python taiko3.py
 ```
