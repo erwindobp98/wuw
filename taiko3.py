@@ -11,7 +11,7 @@ init(autoreset=True)
 PINK = "\033[38;5;206m"  # ANSI code for a pink-like color
 
 # Print "         BY PUCUK KANGKUNG        " in pink
-print(PINK + "BY PUCUK KANGKUNG" + Style.RESET_ALL)  # Print in pink and reset
+print(PINK + "        BY PUCUK KANGKUNG        " + Style.RESET_ALL)  # Print in pink and reset
 
 # Connect to Taiko RPC
 taiko_rpc_url = "https://rpc.ankr.com/taiko"
@@ -68,7 +68,7 @@ max_priority_fee_per_gas = web3.to_wei(gas_price_gwei, 'gwei')
 max_fee_per_gas = web3.to_wei(gas_price_gwei, 'gwei')
 
 def get_random_amount():
-    """Generate a random amount between 0.01 and 0.011 WETH."""
+    """Generate a random amount between 0.01 and 0.011 ETH."""
     return web3.to_wei(random.uniform(0.02309, 0.024), 'ether')
 
 def check_eth_balance():
