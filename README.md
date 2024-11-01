@@ -30,6 +30,10 @@ nano taiko3.py
 ```shell
 pip install web3
 ```
+## Next
+```shell
+pip install colorama
+```
 ## Run taiko1 unwrap random time sleep, random amount
 ```shell
 python taiko1.py
