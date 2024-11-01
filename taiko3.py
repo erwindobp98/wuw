@@ -63,9 +63,16 @@ weth_abi = '''
 
 weth_contract = web3.eth.contract(address=weth_contract_address, abi=weth_abi)
 
-gas_price_gwei = 0.11  # Gas price in Gwei
-max_priority_fee_per_gas = web3.to_wei(gas_price_gwei, 'gwei')
-max_fee_per_gas = web3.to_wei(gas_price_gwei, 'gwei')
+# Gas prices for wrap and unwrap
+gas_price_wrap_gwei = 0.18  # Gas price for wrapping in Gwei
+gas_price_unwrap_gwei = 0.14  # Gas price for unwrapping in Gwei
+
+# Convert gas prices to Wei
+max_priority_fee_per_gas_wrap = web3.to_wei(gas_price_wrap_gwei, 'gwei')
+max_fee_per_gas_wrap = web3.to_wei(gas_price_wrap_gwei, 'gwei')
+
+max_priority_fee_per_gas_unwrap = web3.to_wei(gas_price_unwrap_gwei, 'gwei')
+max_fee_per_gas_unwrap = web3.to_wei(gas_price_unwrap_gwei, 'gwei')
 
 def get_random_amount():
     """Generate a random amount between 0.01 and 0.011 ETH."""
@@ -146,8 +153,8 @@ def wrap_eth_to_weth():
         'to': weth_contract_address,
         'chainId': 167000,
         'gas': gas_estimate,
-        'maxFeePerGas': max_fee_per_gas,
-        'maxPriorityFeePerGas': max_priority_fee_per_gas,
+        'maxFeePerGas': max_fee_per_gas_wrap,
+        'maxPriorityFeePerGas': max_priority_fee_per_gas_wrap,
         'nonce': nonce,
         'value': amount_in_wei,
         'data': '0xd0e30db0'  # Deposit function signature
@@ -177,8 +184,8 @@ def unwrap_weth_to_eth():
         'to': weth_contract_address,
         'chainId': 167000,
         'gas': gas_estimate,
-        'maxFeePerGas': max_fee_per_gas,
-        'maxPriorityFeePerGas': max_priority_fee_per_gas,
+        'maxFeePerGas': max_fee_per_gas_unwrap,
+        'maxPriorityFeePerGas': max_priority_fee_per_gas_unwrap,
         'nonce': nonce,
         'data': '0x2e1a7d4d' + amount_in_wei.to_bytes(32, 'big').hex()  # Withdraw function signature
     }
