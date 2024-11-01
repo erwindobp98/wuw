@@ -11,7 +11,7 @@ init(autoreset=True)
 PINK = "\033[38;5;206m"  # ANSI code for a pink-like color
 
 # Print "         BY PUCUK KANGKUNG        " in pink
-print(PINK + "BY PUCUK KANGKUNG" + Style.RESET_ALL)  # Print in pink and reset
+print(PINK + "        BY PUCUK KANGKUNG        " + Style.RESET_ALL)  # Print in pink and reset
 
 # Connect to Taiko RPC
 taiko_rpc_url = "https://rpc.ankr.com/taiko"
