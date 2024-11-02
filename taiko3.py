@@ -63,20 +63,21 @@ weth_abi = '''
 
 weth_contract = web3.eth.contract(address=weth_contract_address, abi=weth_abi)
 
-# Gas prices for wrap and unwrap
-gas_price_wrap_gwei = 0.18  # Gas price for wrapping in Gwei
-gas_price_unwrap_gwei = 0.14  # Gas price for unwrapping in Gwei
+# Define gas prices at the top of your script
+gas_price_wrap_gwei = 0.11  # Adjust as needed
+gas_price_unwrap_gwei = 0.11  # Adjust as needed
 
-# Convert gas prices to Wei
+# Convert to Wei for use in transactions
 max_priority_fee_per_gas_wrap = web3.to_wei(gas_price_wrap_gwei, 'gwei')
 max_fee_per_gas_wrap = web3.to_wei(gas_price_wrap_gwei, 'gwei')
 
 max_priority_fee_per_gas_unwrap = web3.to_wei(gas_price_unwrap_gwei, 'gwei')
 max_fee_per_gas_unwrap = web3.to_wei(gas_price_unwrap_gwei, 'gwei')
 
+
 def get_random_amount():
     """Generate a random amount between 0.01 and 0.011 ETH."""
-    return web3.to_wei(random.uniform(0.02309, 0.024), 'ether')
+    return web3.to_wei(random.uniform(0.19953, 0.2), 'ether')
 
 def check_eth_balance():
     balance = web3.eth.get_balance(my_address)
@@ -93,32 +94,34 @@ def check_weth_balance():
 def get_next_nonce():
     return web3.eth.get_transaction_count(my_address)
 
-def has_sufficient_balance(amount_in_wei, is_wrap=True):
+def has_sufficient_balance(amount_in_wei, is_wrap=True, max_priority_fee_per_gas=max_priority_fee_per_gas_wrap, max_fee_per_gas=max_fee_per_gas_wrap):
     try:
         if is_wrap:
             gas_estimate = weth_contract.functions.deposit(amount_in_wei).estimate_gas({'from': my_address, 'value': amount_in_wei})
         else:
             gas_estimate = weth_contract.functions.withdraw(amount_in_wei).estimate_gas({'from': my_address})
-        total_cost = max_priority_fee_per_gas * gas_estimate
 
+        total_cost = max_priority_fee_per_gas * gas_estimate
+        # Check ETH or WETH balance based on transaction type
         if is_wrap:
             eth_balance = check_eth_balance()
             if eth_balance >= total_cost:
-                print(Fore.GREEN + f"Sufficient ETH Balance. Required: {web3.from_wei(total_cost, 'ether')} ETH" + Style.RESET_ALL)  # Green
+                print(Fore.GREEN + f"Sufficient ETH Balance. Required: {web3.from_wei(total_cost, 'ether')} ETH" + Style.RESET_ALL)
                 return True
             else:
-                print(Fore.YELLOW + f"Insufficient funds. Balance: {web3.from_wei(eth_balance, 'ether')} ETH, Required: {web3.from_wei(total_cost, 'ether')} ETH" + Style.RESET_ALL)  # Yellow
+                print(Fore.YELLOW + f"Insufficient funds. Balance: {web3.from_wei(eth_balance, 'ether')} ETH, Required: {web3.from_wei(total_cost, 'ether')} ETH" + Style.RESET_ALL)
         else:
             weth_balance = check_weth_balance()
             if weth_balance >= amount_in_wei:
-                print(Fore.GREEN + f"Sufficient WETH Balance. Required: {web3.from_wei(amount_in_wei, 'ether')} WETH" + Style.RESET_ALL)  # Green
+                print(Fore.GREEN + f"Sufficient WETH Balance. Required: {web3.from_wei(amount_in_wei, 'ether')} WETH" + Style.RESET_ALL)
                 return True
             else:
-                print(Fore.YELLOW + f"Insufficient funds. Balance: {web3.from_wei(weth_balance, 'ether')} WETH, Required: {web3.from_wei(amount_in_wei, 'ether')} WETH" + Style.RESET_ALL)  # Yellow
+                print(Fore.YELLOW + f"Insufficient funds. Balance: {web3.from_wei(weth_balance, 'ether')} WETH, Required: {web3.from_wei(amount_in_wei, 'ether')} WETH" + Style.RESET_ALL)
         return False
     except Exception as e:
-        print(Fore.RED + f"Error estimating gas: {e}" + Style.RESET_ALL)  # Red
+        print(Fore.RED + f"Error estimating gas: {e}" + Style.RESET_ALL)
         return False
+
 
 def wait_for_confirmation(tx_hash, timeout=300):
     start_time = time.time()
@@ -234,6 +237,9 @@ while total_tx < 158:
     time.sleep(sleep_time)
 
 print(Fore.GREEN + f"Completed. Total Transactions: {total_tx} (Wrapping: {wrap_counter}, Unwrapping: {unwrap_counter})" + Style.RESET_ALL)  # Green
+
+
+print(f"Completed. Total Transactions: {total_tx} (Wrapping: {wrap_counter}, Unwrapping: {unwrap_counter})")
 
 
 print(f"Completed. Total Transactions: {total_tx} (Wrapping: {wrap_counter}, Unwrapping: {unwrap_counter})")
