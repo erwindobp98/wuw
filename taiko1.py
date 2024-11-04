@@ -63,7 +63,7 @@ weth_abi = '''
 
 weth_contract = web3.eth.contract(address=weth_contract_address, abi=weth_abi)
 
-gas_price_gwei = 0.18  # Gas price in Gwei
+gas_price_gwei = 0.14  # Gas price in Gwei
 max_priority_fee_per_gas = web3.to_wei(gas_price_gwei, 'gwei')
 max_fee_per_gas = web3.to_wei(gas_price_gwei, 'gwei')
 
@@ -201,7 +201,7 @@ while total_tx < 74:
     eth_balance = check_weth_balance()
 
     # Unwrap WETH to ETH
-    if unwrap_counter < 37 and total_tx < 74:
+    if unwrap_counter < 74 and total_tx < 74:
         if unwrap_weth_to_eth():
             unwrap_counter += 1
             total_tx += 1
@@ -213,5 +213,3 @@ while total_tx < 74:
     time.sleep(sleep_time)
 
 print(Fore.GREEN + f"Completed. Total Transactions: {total_tx} (Wrapping: {wrap_counter}, Unwrapping: {unwrap_counter})" + Style.RESET_ALL)  # Green
-
-
