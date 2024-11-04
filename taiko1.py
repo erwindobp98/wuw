@@ -197,19 +197,24 @@ wrap_counter = 0
 unwrap_counter = 0
 total_tx = 0
 
-while total_tx < 74:
-    eth_balance = check_weth_balance()
+try:
+    while total_tx < 74:
+        weth_balance = check_eth_balance()
 
-    # Unwrap WETH to ETH
-    if unwrap_counter < 74 and total_tx < 74:
-        if unwrap_weth_to_eth():
-            unwrap_counter += 1
-            total_tx += 1
-            print(Fore.BLUE + f"Total Transactions: {total_tx} (Unwrapping: {unwrap_counter})" + Style.RESET_ALL)  # Blue
+        # Unwrap WETH to ETH
+        if unwrap_counter < 37 and total_tx < 74:
+            if unwrap_weth_to_eth():
+                unwrap_counter += 1
+                total_tx += 1
+                print(Fore.BLUE + f"Total Transactions: {total_tx} (Unwrapping: {unwrap_counter})" + Style.RESET_ALL)  # Blue
 
-    # Optional: Sleep for a random duration between transactions
-    sleep_time = random.uniform(10, 20)
-    print(Fore.BLUE + f"Sleeping for {sleep_time:.2f} seconds before the next transaction." + Style.RESET_ALL)  # Blue
-    time.sleep(sleep_time)
+        # Optional: Sleep for a random duration between transactions
+        sleep_time = random.uniform(15, 25)
+        print(Fore.BLUE + f"Sleeping for {sleep_time:.2f} seconds before the next transaction." + Style.RESET_ALL)  # Blue
+        time.sleep(sleep_time)
 
-print(Fore.GREEN + f"Completed. Total Transactions: {total_tx} (Wrapping: {wrap_counter}, Unwrapping: {unwrap_counter})" + Style.RESET_ALL)  # Green
+except KeyboardInterrupt:
+    print(Fore.RED + "\nInterrupted by user." + Style.RESET_ALL)
+finally:
+        print(Fore.MAGENTA + f"Total Transactions: {total_tx} (Wrapping: {wrap_counter}, Unwrapping: {unwrap_counter})" + Style.RESET_ALL)
+        print(Fore.YELLOW + "Thank you tod!" + Style.RESET_ALL)
