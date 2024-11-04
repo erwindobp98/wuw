@@ -135,6 +135,8 @@ def wrap_eth_to_weth(amount_in_wei):
         print(Fore.YELLOW + "Waiting for sufficient ETH balance to wrap...")
         return False
 
+    print(Fore.YELLOW + f"Preparing to wrap: {web3.from_wei(amount_in_wei, 'ether')} ETH to WETH")
+
     nonce = get_next_nonce()
     gas_estimate = weth_contract.functions.deposit(amount_in_wei).estimate_gas({'from': my_address, 'value': amount_in_wei})
     transaction = {
@@ -163,6 +165,8 @@ def unwrap_weth_to_eth(amount_in_wei):
     if not has_sufficient_balance(amount_in_wei, is_wrap=False):
         print(Fore.YELLOW + "Waiting for sufficient WETH balance to unwrap...")
         return False
+
+    print(Fore.YELLOW + f"Preparing to unwrap: {web3.from_wei(amount_in_wei, 'ether')} WETH to ETH")
 
     nonce = get_next_nonce()
     gas_estimate = weth_contract.functions.withdraw(amount_in_wei).estimate_gas({'from': my_address})
