@@ -169,7 +169,7 @@ def unwrap_weth_to_eth():
         print(Fore.YELLOW + "Waiting for sufficient WETH balance..." + Style.RESET_ALL)  # Yellow
         return False
 
-    print(Fore.BLUE + f"Preparing to unwrap: {web3.from_wei(amount_in_wei, 'ether')} WETH to ETH" + Style.RESET_ALL)  # Blue
+    print(Fore.YELLOW + f"Preparing to unwrap: {web3.from_wei(amount_in_wei, 'ether')} WETH to ETH" + Style.RESET_ALL)  # Blue
 
     nonce = get_next_nonce()
     gas_estimate = weth_contract.functions.withdraw(amount_in_wei).estimate_gas({'from': my_address})
