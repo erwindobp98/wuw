@@ -145,7 +145,7 @@ def wait_for_confirmation(tx_hash, timeout=300):
 def wrap_eth_to_weth():
     amount_in_wei = get_random_amount()  # Get a random amount for wrapping
     if not has_sufficient_balance(amount_in_wei, is_wrap=True):
-        print(Fore.BLUE + "Waiting for sufficient ETH balance..." + Style.RESET_ALL)  # Yellow
+        print(Fore.YELLOW + "Waiting for sufficient ETH balance..." + Style.RESET_ALL)  # Yellow
         return False
 
     print(Fore.YELLOW + f"Preparing to wrap: {web3.from_wei(amount_in_wei, 'ether')} ETH to WETH" + Style.RESET_ALL)  # Blue
@@ -176,7 +176,7 @@ def wrap_eth_to_weth():
 def unwrap_weth_to_eth():
     amount_in_wei = get_random_amount()  # Get a random amount for unwrapping
     if not has_sufficient_balance(amount_in_wei, is_wrap=False):
-        print(Fore.BLUE + "Waiting for sufficient WETH balance..." + Style.RESET_ALL)  # Yellow
+        print(Fore.YELLOW + "Waiting for sufficient WETH balance..." + Style.RESET_ALL)  # Yellow
         return False
 
     print(Fore.YELLOW + f"Preparing to unwrap: {web3.from_wei(amount_in_wei, 'ether')} WETH to ETH" + Style.RESET_ALL)  # Blue
