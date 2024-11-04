@@ -1,7 +1,7 @@
 ## INGPO
 ## taiko1 unwrap random time sleep, random amount
 ## taiko2 wrap, unwrap random time sleep, single amount
-## taiko3 wrap, unwrap random time sleep, random amount
+## taiko3 wrap, unwrap random time sleep, random amount, split gwei wrap and unwrap
 
 
 ## Installation
@@ -42,7 +42,7 @@ python taiko1.py
 ```shell
 python taiko2.py
 ```
-## Run taiko3 wrap, unwrap random time sleep, random amount
+## Run taiko3 wrap, unwrap random time sleep, random amount, split gwei wrap and unwrap
 ```shell
 python taiko3.py
 ```
