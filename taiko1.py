@@ -202,7 +202,7 @@ try:
         weth_balance = check_eth_balance()
 
         # Unwrap WETH to ETH
-        if unwrap_counter < 37 and total_tx < 74:
+        if unwrap_counter < 74 and total_tx < 74:
             if unwrap_weth_to_eth():
                 unwrap_counter += 1
                 total_tx += 1
