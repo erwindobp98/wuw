@@ -1,6 +1,6 @@
 ## INGPO
 ## taiko1 unwrap random time sleep, random amount
-## taiko2 wrap, unwrap random time sleep, single amount
+## taiko2 wrap, unwrap random time sleep, single amount, split gwei wrap and unwrap
 ## taiko3 wrap, unwrap random time sleep, random amount, split gwei wrap and unwrap
 
 
@@ -38,7 +38,7 @@ pip install colorama
 ```shell
 python taiko1.py
 ```
-## Run taiko2 wrap, unwrap random time sleep, single amount
+## Run taiko2 wrap, unwrap random time sleep, single amount, split gwei wrap and unwrap
 ```shell
 python taiko2.py
 ```
