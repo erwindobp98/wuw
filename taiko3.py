@@ -145,10 +145,10 @@ def wait_for_confirmation(tx_hash, timeout=300):
 def wrap_eth_to_weth():
     amount_in_wei = get_random_amount()  # Get a random amount for wrapping
     if not has_sufficient_balance(amount_in_wei, is_wrap=True):
-        print(Fore.YELLOW + "Waiting for sufficient ETH balance..." + Style.RESET_ALL)  # Yellow
+        print(Fore.BLUE + "Waiting for sufficient ETH balance..." + Style.RESET_ALL)  # Yellow
         return False
 
-    print(Fore.BLUE + f"Preparing to wrap: {web3.from_wei(amount_in_wei, 'ether')} ETH to WETH" + Style.RESET_ALL)  # Blue
+    print(Fore.YELLOW + f"Preparing to wrap: {web3.from_wei(amount_in_wei, 'ether')} ETH to WETH" + Style.RESET_ALL)  # Blue
 
     nonce = get_next_nonce()
     gas_estimate = weth_contract.functions.deposit(amount_in_wei).estimate_gas({'from': my_address, 'value': amount_in_wei})
@@ -176,10 +176,10 @@ def wrap_eth_to_weth():
 def unwrap_weth_to_eth():
     amount_in_wei = get_random_amount()  # Get a random amount for unwrapping
     if not has_sufficient_balance(amount_in_wei, is_wrap=False):
-        print(Fore.YELLOW + "Waiting for sufficient WETH balance..." + Style.RESET_ALL)  # Yellow
+        print(Fore.BLUE + "Waiting for sufficient WETH balance..." + Style.RESET_ALL)  # Yellow
         return False
 
-    print(Fore.BLUE + f"Preparing to unwrap: {web3.from_wei(amount_in_wei, 'ether')} WETH to ETH" + Style.RESET_ALL)  # Blue
+    print(Fore.YELLOW + f"Preparing to unwrap: {web3.from_wei(amount_in_wei, 'ether')} WETH to ETH" + Style.RESET_ALL)  # Blue
 
     nonce = get_next_nonce()
     gas_estimate = weth_contract.functions.withdraw(amount_in_wei).estimate_gas({'from': my_address})
@@ -206,35 +206,6 @@ def unwrap_weth_to_eth():
 wrap_counter = 0
 unwrap_counter = 0
 total_tx = 0
-
-while total_tx < 158:
-    eth_balance = check_weth_balance()
-
-    # Wrap ETH to WETH
-    if wrap_counter < 79 and total_tx < 158:
-        if wrap_eth_to_weth():
-            wrap_counter += 1
-            total_tx += 1
-            print(Fore.BLUE + f"Total Transactions: {total_tx} (Wrapping: {wrap_counter})" + Style.RESET_ALL)  # Blue
-
-    # Optional: Sleep for a random duration between transactions
-    sleep_time = random.uniform(15, 25)
-    print(Fore.BLUE + f"Sleeping for {sleep_time:.2f} seconds before the next transaction." + Style.RESET_ALL)  # Blue
-    time.sleep(sleep_time)
-
-    weth_balance = check_eth_balance()
-
-    # Unwrap WETH to ETH
-    if unwrap_counter < 79 and total_tx < 158:
-        if unwrap_weth_to_eth():
-            unwrap_counter += 1
-            total_tx += 1
-            print(Fore.BLUE + f"Total Transactions: {total_tx} (Unwrapping: {unwrap_counter})" + Style.RESET_ALL)  # Blue
-
-    # Optional: Sleep for a random duration between transactions
-    sleep_time = random.uniform(15, 25)
-    print(Fore.BLUE + f"Sleeping for {sleep_time:.2f} seconds before the next transaction." + Style.RESET_ALL)  # Blue
-    time.sleep(sleep_time)
 
 try:
     while total_tx < 74:
