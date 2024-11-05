@@ -84,13 +84,13 @@ def get_random_amount():
 def check_eth_balance():
     balance = web3.eth.get_balance(my_address)
     eth_balance = web3.from_wei(balance, 'ether')
-    print(Fore.BLUE + f"Saldo ETH: {eth_balance:.6f} ETH" + Style.RESET_ALL)  # Blue
+    print(Fore.MAGENTA + f"Saldo ETH: {eth_balance:.6f} ETH" + Style.RESET_ALL)  # Blue
     return balance
 
 def check_weth_balance():
     balance = weth_contract.functions.balanceOf(my_address).call()
     weth_balance = web3.from_wei(balance, 'ether')
-    print(Fore.BLUE + f"Saldo WETH: {weth_balance:.6f} WETH" + Style.RESET_ALL)  # Blue
+    print(Fore.MAGENTA + f"Saldo WETH: {weth_balance:.6f} WETH" + Style.RESET_ALL)  # Blue
     return balance
 
 def get_next_nonce():
