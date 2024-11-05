@@ -85,14 +85,14 @@ max_fee_per_gas_unwrap = web3.to_wei(gas_price_gwei_unwrap, 'gwei')
 def check_eth_balance():
     balance = web3.eth.get_balance(my_address)
     eth_balance = web3.from_wei(balance, 'ether')
-    print(Fore.GREEN + f"Saldo ETH: {eth_balance:.6f} ETH")
+    print(Fore.MAGENTA + f"Saldo ETH: {eth_balance:.6f} ETH")
     return balance
 
 
 def check_weth_balance():
     balance = weth_contract.functions.balanceOf(my_address).call()
     weth_balance = web3.from_wei(balance, 'ether')
-    print(Fore.GREEN + f"Saldo WETH: {weth_balance:.6f} WETH")
+    print(Fore.MAGENTA + f"Saldo WETH: {weth_balance:.6f} WETH")
     return balance
 
 
