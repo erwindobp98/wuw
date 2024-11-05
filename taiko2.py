@@ -4,8 +4,23 @@ import os
 import random
 from colorama import init, Fore, Style
 
-# Initialize Colorama
+# Inisialisasi colorama
 init(autoreset=True)
+
+def art():
+    width = 50  # Lebar area teks yang ingin dipusatkan
+    print(Fore.YELLOW + r"""
+================================================
+""" + "Airdrop Community".center(width) + """
+================================================
+""" + "Bot : TAIKO".center(width) + """
+""" + "Telegram Channel : @airdropcom9".center(width) + """
+""" + "Telegram Group : @airdropcom8".center(width) + """
+================================================
+""" + Fore.GREEN)
+
+if __name__ == "__main__":
+    art()
 
 # Connect to Taiko RPC
 taiko_rpc_url = "https://rpc.ankr.com/taiko"
