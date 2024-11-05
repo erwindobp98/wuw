@@ -212,43 +212,59 @@ def unwrap_weth_to_eth():
         print(Fore.RED + f"Transaction error: {e}" + Style.RESET_ALL)  # Red
     return False
 
+def print_sleep_time(sleep_time):
+    """Print the sleep time and count down in milliseconds."""
+    print(Fore.BLUE + f"Sleeping for {sleep_time:.2f} seconds..." + Style.RESET_ALL)  # Blue
+    total_seconds = int(sleep_time)
+    total_milliseconds = int((sleep_time - total_seconds) * 1000)  # Konversi sisa waktu ke milidetik
+
+    for remaining in range(total_seconds, 0, -1):
+        for millis in range(1000, 0, -100):  # Hitung mundur dalam milidetik
+            sys.stdout.write(f"\r{Fore.YELLOW}{remaining} seconds and {millis//100} milliseconds remaining...{Style.RESET_ALL}")  # Yellow
+            sys.stdout.flush()
+            time.sleep(0.1)  # Tunggu 100 milidetik untuk update tampilan
+        remaining -= 1
+    # Tampilkan milidetik terakhir jika ada
+    if total_milliseconds > 0:
+        sys.stdout.write(f"\r{Fore.YELLOW}0 seconds and {total_milliseconds} milliseconds remaining...{Style.RESET_ALL}")
+        sys.stdout.flush()
+        time.sleep(total_milliseconds / 1000)  # Tunggu sisa milidetik terakhir
+    print()  # Mencetak newline setelah countdown
+
 wrap_counter = 0
 unwrap_counter = 0
 total_tx = 0
 
 try:
-    while total_tx < 74:
+    while total_tx < 196:
         eth_balance = check_weth_balance()
 
         # Wrap ETH to WETH
-        if wrap_counter < 37 and total_tx < 74:
+        if wrap_counter < 98 and total_tx < 196:
             if wrap_eth_to_weth():
                 wrap_counter += 1
                 total_tx += 1
                 print(Fore.BLUE + f"Total Transactions: {total_tx} (Wrapping: {wrap_counter})" + Style.RESET_ALL)  # Blue
 
-        # Optional: Sleep for a random duration between transactions
+        # Sleep untuk durasi acak antara transaksi
         sleep_time = random.uniform(15, 25)
-        print(Fore.BLUE + f"Sleeping for {sleep_time:.2f} seconds before the next transaction." + Style.RESET_ALL)  # Blue
-        time.sleep(sleep_time)
+        print_sleep_time(sleep_time)  # Memanggil fungsi countdown
 
         weth_balance = check_eth_balance()
 
         # Unwrap WETH to ETH
-        if unwrap_counter < 37 and total_tx < 74:
+        if unwrap_counter < 98 and total_tx < 196:
             if unwrap_weth_to_eth():
                 unwrap_counter += 1
                 total_tx += 1
                 print(Fore.BLUE + f"Total Transactions: {total_tx} (Unwrapping: {unwrap_counter})" + Style.RESET_ALL)  # Blue
 
-        # Optional: Sleep for a random duration between transactions
+        # Sleep untuk durasi acak antara transaksi
         sleep_time = random.uniform(15, 25)
-        print(Fore.BLUE + f"Sleeping for {sleep_time:.2f} seconds before the next transaction." + Style.RESET_ALL)  # Blue
-        time.sleep(sleep_time)
+        print_sleep_time(sleep_time)  # Memanggil fungsi countdown
 
 except KeyboardInterrupt:
     print(Fore.RED + "\nInterrupted by user." + Style.RESET_ALL)
 finally:
-        print(Fore.MAGENTA + f"Total Transactions: {total_tx} (Wrapping: {wrap_counter}, Unwrapping: {unwrap_counter})" + Style.RESET_ALL)
-        print(Fore.YELLOW + "Thank you tod!" + Style.RESET_ALL)
-
+    print(Fore.MAGENTA + f"Total Transactions: {total_tx} (Wrapping: {wrap_counter}, Unwrapping: {unwrap_counter})" + Style.RESET_ALL)
+    print(Fore.YELLOW + "Thank you tod!" + Style.RESET_ALL)
