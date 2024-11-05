@@ -4,14 +4,23 @@ import os
 import random
 from colorama import init, Fore, Style
 
-# Initialize colorama
+# Inisialisasi colorama
 init(autoreset=True)
 
-# Define a custom pink color using ANSI escape codes
-PINK = "\033[38;5;206m"  # ANSI code for a pink-like color
+def art():
+    width = 50  # Lebar area teks yang ingin dipusatkan
+    print(Fore.YELLOW + r"""
+================================================
+""" + "Airdrop Community".center(width) + """
+================================================
+""" + "Bot : TAIKO".center(width) + """
+""" + "Telegram Channel : @airdropcom9".center(width) + """
+""" + "Telegram Group : @airdropcom8".center(width) + """
+================================================
+""" + Fore.GREEN)
 
-# Print "         BY PUCUK KANGKUNG        " in pink
-print(PINK + "        BY PUCUK KANGKUNG        " + Style.RESET_ALL)  # Print in pink and reset
+if __name__ == "__main__":
+    art()
 
 # Connect to Taiko RPC
 taiko_rpc_url = "https://rpc.ankr.com/taiko"
