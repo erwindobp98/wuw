@@ -123,22 +123,33 @@ def has_sufficient_balance(amount_in_wei, is_wrap=True):
         return False
 
 def wait_for_confirmation(tx_hash, timeout=300):
-    start_time = time.time()
-    while time.time() - start_time < timeout:
+    start_time = time.time()  # Waktu mulai dalam detik
+
+    while time.time() - start_time < timeout:  # Menggunakan detik untuk perbandingan
         try:
             receipt = web3.eth.get_transaction_receipt(tx_hash)
             if receipt:
                 if receipt['status'] == 1:
                     print(Fore.GREEN + f"Transaction Successful | Tx Hash: {web3.to_hex(tx_hash)} | Network: Taiko" + Style.RESET_ALL)  # Green
-                    print(f"Transaction execution time: {int(time.time() - start_time)} seconds")
+                    print(f"Transaction execution time: {int(time.time() - start_time)} seconds")  # Menampilkan waktu eksekusi dalam detik
                     return True
                 else:
                     print(Fore.RED + f"Transaction Failed | Tx Hash: {web3.to_hex(tx_hash)}" + Style.RESET_ALL)  # Red
                     return False
         except Exception:
             pass
-        time.sleep(30)  # Wait before checking again
-    print(Fore.RED + f"Timeout waiting for confirmation for Tx Hash: {web3.to_hex(tx_hash)}" + Style.RESET_ALL)  # Red
+        
+        # Hitung waktu tersisa dan tampilkan countdown dalam detik
+        remaining_time = timeout - (time.time() - start_time)  # Waktu tersisa dalam detik
+        if remaining_time > 0:
+            sys.stdout.write(f"\r{Fore.YELLOW}Waiting for confirmation... {int(remaining_time)} seconds remaining...{Style.RESET_ALL}")  # Yellow
+            sys.stdout.flush()
+        else:
+            break
+            
+        time.sleep(1)  # Tunggu 1 detik sebelum memeriksa lagi
+    
+    print(Fore.RED + f"\nTimeout waiting for confirmation for Tx Hash: {web3.to_hex(tx_hash)}" + Style.RESET_ALL)  # Red
     return False
 
 def wrap_eth_to_weth():
