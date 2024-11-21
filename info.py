@@ -86,63 +86,127 @@ def get_transaction_data_from_taiko(address):
         adjusted_gas_fee_eth_from_sep16 = total_gas_fee_from_sep16 / 1e9
         total_gas_fee_usd_from_sep16 = adjusted_gas_fee_eth_from_sep16 * eth_to_usd_rate
 
-        # Fetching Rank and other metrics from the API
-        rank_url = f'https://trailblazer.mainnet.taiko.xyz/s2/user/rank?address={address}'
-
-        # Add headers if needed (e.g., User-Agent or Authorization)
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',  # Replace with your app name or relevant identifier
-            # 'Authorization': 'Bearer YOUR_API_KEY'  # Uncomment if an API key is needed
+        return {
+            'total_gas_fee_today': total_gas_fee_today,
+            'tx_count_today': tx_count_today,
+            'total_gas_fee_from_sep16': total_gas_fee_from_sep16,
+            'tx_count_from_sep16': tx_count_from_sep16,
+            'adjusted_gas_fee_eth_today': adjusted_gas_fee_eth_today,
+            'total_gas_fee_usd_today': total_gas_fee_usd_today,
+            'adjusted_gas_fee_eth_from_sep16': adjusted_gas_fee_eth_from_sep16,
+            'total_gas_fee_usd_from_sep16': total_gas_fee_usd_from_sep16
         }
-
-        rank_response = requests.get(rank_url, headers=headers)
-
-        if rank_response.status_code != 200:
-            print(Fore.RED + f"Failed to fetch rank data: {rank_response.status_code}")
-            print(Fore.RED + f"Response: {rank_response.text}")  # Print the error message from the API
-        else:
-            rank_data = rank_response.json()
-
-            if 'rank' not in rank_data:
-                print(Fore.YELLOW + 'Tidak ada data rank ditemukan.')
-            else:
-                rank = rank_data.get('rank', 'N/A')
-                score = rank_data.get('score', 'N/A')
-                multiplier = rank_data.get('multiplier', 'N/A')
-                total_score = rank_data.get('totalScore', 'N/A')
-                total = rank_data.get('total', 'N/A')
-                blacklisted = rank_data.get('blacklisted', 'N/A')
-                breakdown = rank_data.get('breakdown', 'N/A')
-
-                animated_print("=================================================================", color=Fore.MAGENTA, delay=0.02)
-                animated_print("                  Taiko Rank Information S2              ", color=Fore.GREEN, delay=0.02)
-                animated_print("=================================================================", color=Fore.MAGENTA, delay=0.02)
-                animated_print(f"Rank                         : {rank}", color=Fore.WHITE, delay=0.02)
-                animated_print(f"Score                        : {score}", color=Fore.YELLOW, delay=0.02)
-                animated_print(f"Multiplier                   : {multiplier}", color=Fore.CYAN, delay=0.02)
-                animated_print(f"Total Score                  : {total_score}", color=Fore.BLUE, delay=0.02)
-                animated_print(f"Total User                   : {total}", color=Fore.GREEN, delay=0.02)
-                animated_print(f"Blacklisted                  : {blacklisted}", color=Fore.RED, delay=0.02)
-                animated_print(f"Breakdown                    : {breakdown}", color=Fore.MAGENTA, delay=0.02)
-                animated_print(f"Gas Fee ETH (Hari Ini)       : {adjusted_gas_fee_eth_today:.10f} ETH", color=Fore.YELLOW, delay=0.02)
-                animated_print(f"Gas Fee USD (Hari Ini)       : ${total_gas_fee_usd_today:.2f}", color=Fore.YELLOW, delay=0.02)
-                animated_print(f"Jumlah tx Hari Ini           : {tx_count_today} transaksi", color=Fore.GREEN, delay=0.02)
-                animated_print(f"Total Gas Fee ETH TAIKO S2   : {adjusted_gas_fee_eth_from_sep16:.10f} ETH", color=Fore.BLUE, delay=0.02)
-                animated_print(f"Total Gas Fee USD TAIKO S2   : ${total_gas_fee_usd_from_sep16:.2f}", color=Fore.BLUE, delay=0.02)
-                animated_print(f"Jumlah Tx TAIKO S2           : {tx_count_from_sep16} transaksi", color=Fore.GREEN, delay=0.02)
-                animated_print("=================================================================", color=Fore.MAGENTA, delay=0.02)
 
     except requests.RequestException as e:
         print(Fore.RED + f'Error fetching transaction data: {e}')
+        return None
+
+def get_final_data(address):
+    try:
+        final_url = f'https://trailblazer.mainnet.taiko.xyz/user/final?address={address}'
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (compatible; TaikoRankChecker/1.0)'
+        }
+        response = requests.get(final_url, headers=headers)
+
+        if response.status_code == 403:
+            print(Fore.RED + "Gagal mengambil data final: Akses ditolak (403). Pastikan Anda memiliki izin akses.")
+            return None
+
+        if response.status_code != 200:
+            print(Fore.RED + f"Gagal mengambil data final: {response.status_code}")
+            return None
+
+        data = response.json()
+        return {
+            "score": data.get('score', 'N/A'),
+            "multiplier": data.get('multiplier', 'N/A'),
+            "total": data.get('total', 'N/A')
+        }
+    except requests.RequestException as e:
+        print(Fore.RED + f'Error fetching final data: {e}')
+        return None
+
+def get_rank_data(address):
+    try:
+        rank_url = f'https://trailblazer.mainnet.taiko.xyz/s2/user/rank?address={address}'
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (compatible; TaikoRankChecker/1.0)'
+        }
+        response = requests.get(rank_url, headers=headers)
+        if response.status_code != 200:
+            print(Fore.RED + f"Failed to fetch rank data: {response.status_code}")
+            return None
+
+        return response.json()
+    except requests.RequestException as e:
+        print(Fore.RED + f'Error fetching rank data: {e}')
+        return None
+
+def display_taiko_data(address):
+    transaction_data = get_transaction_data_from_taiko(address)
+    final_data = get_final_data(address)
+    rank_data = get_rank_data(address)
+
+    if transaction_data:
+        animated_print("=================================================================", color=Fore.MAGENTA, delay=0.02)
+        animated_print("                  Taiko Transaction Data              ", color=Fore.GREEN, delay=0.02)
+        animated_print("=================================================================", color=Fore.MAGENTA, delay=0.02)
+        if 'adjusted_gas_fee_eth_today' in transaction_data:
+            animated_print(f"Gas Fee ETH (Hari Ini)       : {transaction_data['adjusted_gas_fee_eth_today']:.10f} ETH", color=Fore.YELLOW, delay=0.02)
+        
+        if 'total_gas_fee_usd_today' in transaction_data:
+            animated_print(f"Gas Fee USD (Hari Ini)       : ${transaction_data['total_gas_fee_usd_today']:.2f}", color=Fore.YELLOW, delay=0.02)
+        
+        if 'tx_count_today' in transaction_data:
+            animated_print(f"Jumlah Tx Hari Ini           : {transaction_data['tx_count_today']} transaksi", color=Fore.GREEN, delay=0.02)
+        
+        if 'adjusted_gas_fee_eth_from_sep16' in transaction_data:
+            animated_print(f"Total Gas Fee ETH TAIKO S2   : {transaction_data['adjusted_gas_fee_eth_from_sep16']:.10f} ETH", color=Fore.BLUE, delay=0.02)
+        
+        if 'total_gas_fee_usd_from_sep16' in transaction_data:
+            animated_print(f"Total Gas Fee USD TAIKO S2   : ${transaction_data['total_gas_fee_usd_from_sep16']:.2f}", color=Fore.BLUE, delay=0.02)
+        
+        if 'tx_count_from_sep16' in transaction_data:
+            animated_print(f"Jumlah Tx TAIKO S2           : {transaction_data['tx_count_from_sep16']} transaksi", color=Fore.GREEN, delay=0.02)
+
+    if rank_data:
+        rank = rank_data.get('rank', 'N/A')
+        score = rank_data.get('score', 'N/A')
+        multiplier = rank_data.get('multiplier', 'N/A')
+        total_score = rank_data.get('totalScore', 'N/A')
+        total = rank_data.get('total', 'N/A')
+        blacklisted = rank_data.get('blacklisted', 'N/A')
+        breakdown = rank_data.get('breakdown', 'N/A')
+
+        animated_print("=================================================================", color=Fore.MAGENTA, delay=0.02)
+        animated_print("                  Taiko Rank Data              ", color=Fore.GREEN, delay=0.02)
+        animated_print("=================================================================", color=Fore.MAGENTA, delay=0.02)
+        animated_print(f"Rank                         : {rank}", color=Fore.YELLOW, delay=0.02)
+        animated_print(f"Score                        : {score}", color=Fore.YELLOW, delay=0.02)
+        animated_print(f"Multiplier                   : {multiplier}", color=Fore.CYAN, delay=0.02)
+        animated_print(f"Total Score                  : {total_score}", color=Fore.CYAN, delay=0.02)
+        animated_print(f"Total                        : {total}", color=Fore.BLUE, delay=0.02)
+        animated_print(f"Blacklisted                  : {blacklisted}", color=Fore.RED, delay=0.02)
+        animated_print(f"Breakdown                    : {breakdown}", color=Fore.MAGENTA, delay=0.02)
+
+    if final_data:
+        animated_print("=================================================================", color=Fore.MAGENTA, delay=0.02)
+        animated_print("                  Informasi Data Final Taiko              ", color=Fore.GREEN, delay=0.02)
+        animated_print("=================================================================", color=Fore.MAGENTA, delay=0.02)
+        animated_print(f"Score                        : {final_data['score']}", color=Fore.YELLOW, delay=0.02)
+        animated_print(f"Multiplier                   : {final_data['multiplier']}", color=Fore.CYAN, delay=0.02)
+        animated_print(f"Total                        : {final_data['total']}", color=Fore.BLUE, delay=0.02)
+        animated_print("=================================================================", color=Fore.MAGENTA, delay=0.02)
 
 
-try:
-    animated_print("Selamat datang di Taiko Rank Checker S2!", color=Fore.CYAN, delay=0.1)
-    # Meminta alamat wallet dari pengguna
-    address = input("Masukkan alamat wallet: ")
-    animated_print(f"Mengambil data untuk wallet: {address}", color=Fore.YELLOW, delay=0.05)
-    get_transaction_data_from_taiko(address)
-except KeyboardInterrupt:
-    animated_print("\nDihentikan oleh pengguna.", color=Fore.RED, delay=0.05)
-finally:
-    animated_print("Terima kasih telah menggunakan layanan ini TOL! 🥳", color=Fore.YELLOW, delay=0.05)
+if __name__ == "__main__":
+    try:
+        animated_print("Selamat datang di Taiko Rank Checker S2!", color=Fore.CYAN, delay=0.02)
+        address = input("Masukkan alamat wallet: ")
+        display_taiko_data(address)
+    except KeyboardInterrupt:
+        animated_print("\nDihentikan oleh pengguna.", color=Fore.RED, delay=0.02)
+    finally:
+        animated_print("Terima kasih telah menggunakan layanan ini! 🥳", color=Fore.YELLOW, delay=0.02)
+
