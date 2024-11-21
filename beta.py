@@ -223,7 +223,7 @@ def wrap_eth_to_weth():
     signed_txn = web3.eth.account.sign_transaction(transaction, private_key)
     try:
         tx_hash = web3.eth.send_raw_transaction(signed_txn.raw_transaction)
-        animated_print(f"Transaksi terkirim: Membungkus ETH menjadi WETH | Jumlah: {web3.from_wei(amount_in_wei, 'ether')} WETH | Tx Hash: {web3.to_hex(tx_hash)} | Jaringan: Taiko", color=Fore.BLUE, delay=0.02)  # Dengan warna dan delay
+        animated_print(f"Transaksi terkirim: Membungkus ETH menjadi WETH | Jumlah: {web3.from_wei(amount_in_wei, 'ether')} WETH | Tx Hash: {web3.to_hex(tx_hash)} | Jaringan: Taiko", color=Fore.BLUE, delay=0.01)  # Dengan warna dan delay
         if wait_for_confirmation(tx_hash):
             check_connection()  # Pastikan koneksi tetap stabil setelah transaksi
             return True
@@ -259,7 +259,7 @@ def unwrap_weth_to_eth():
     signed_txn = web3.eth.account.sign_transaction(transaction, private_key)
     try:
         tx_hash = web3.eth.send_raw_transaction(signed_txn.raw_transaction)
-        animated_print(f"Transaksi terkirim: Membuka WETH menjadi ETH | Jumlah: {web3.from_wei(amount_in_wei, 'ether')} ETH | Tx Hash: {web3.to_hex(tx_hash)} | Jaringan: Taiko", color=Fore.BLUE, delay=0.02)  # Dengan warna dan delay
+        animated_print(f"Transaksi terkirim: Membuka WETH menjadi ETH | Jumlah: {web3.from_wei(amount_in_wei, 'ether')} ETH | Tx Hash: {web3.to_hex(tx_hash)} | Jaringan: Taiko", color=Fore.BLUE, delay=0.01)  # Dengan warna dan delay
         
         # Menunggu konfirmasi transaksi dengan pengecekan koneksi
         if wait_for_confirmation(tx_hash):
