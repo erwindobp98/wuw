@@ -3,25 +3,18 @@ import time
 import os
 import sys
 import random
-from colorama import init, Fore, Style
+from colorama import Fore  # Import untuk warna
 
-# Inisialisasi colorama
-init(autoreset=True)
-
-def art():
-    width = 50  # Lebar area teks yang ingin dipusatkan
-    print(Fore.YELLOW + r"""
-================================================
-""" + "Airdrop Community".center(width) + """
-================================================
-""" + "Bot : TAIKO".center(width) + """
-""" + "Telegram Channel : @airdropcom9".center(width) + """
-""" + "Telegram Group : @airdropcom8".center(width) + """
-================================================
-""" + Fore.GREEN)
-
-if __name__ == "__main__":
-    art()
+def animated_print(text, color=Fore.WHITE, delay=0.02):
+    """Mencetak teks dengan animasi dan opsi warna."""
+    # Terapkan warna jika diberikan
+    sys.stdout.write(color)
+    for char in text:
+        sys.stdout.write(char)
+        sys.stdout.flush()
+        time.sleep(delay)
+    sys.stdout.write(Fore.RESET)  # Reset warna setelah selesai
+    print()  # Untuk baris baru di akhir animasi
 
 # Daftar RPC Taiko
 taiko_rpc_list = [
@@ -39,11 +32,11 @@ def get_connected_web3():
     for rpc_url in taiko_rpc_list:
         web3_instance = Web3(Web3.HTTPProvider(rpc_url))
         if web3_instance.is_connected():
-            print(Fore.GREEN + f"Terhubung ke RPC: {rpc_url}" + Style.RESET_ALL)
+            animated_print(f"Terhubung ke RPC: {rpc_url}", color=Fore.GREEN)
             return web3_instance, rpc_url
         else:
-            print(Fore.RED + f"Gagal terhubung ke RPC: {rpc_url}" + Style.RESET_ALL)
-    print(Fore.RED + "Tidak ada RPC yang bisa terhubung." + Style.RESET_ALL)
+            animated_print(f"Gagal terhubung ke RPC: {rpc_url}", color=Fore.RED)
+    animated_print("Tidak ada RPC yang bisa terhubung.", color=Fore.RED)
     exit()
 
 # Coba hubungkan ke salah satu RPC
@@ -54,17 +47,17 @@ def check_connection():
     """Periksa koneksi ke jaringan dan pilih ulang RPC jika koneksi terputus."""
     global web3, active_rpc_url
     if not web3.is_connected():
-        print(Fore.RED + f"Koneksi terputus dengan RPC: {active_rpc_url}. Mencoba RPC lain..." + Style.RESET_ALL)
+        animated_print(f"Koneksi terputus dengan RPC: {active_rpc_url}. Mencoba RPC lain...", color=Fore.YELLOW)
         previous_rpc = active_rpc_url  # Simpan RPC sebelumnya untuk log
         web3, active_rpc_url = get_connected_web3()
         if active_rpc_url != previous_rpc:
-            print(Fore.CYAN + f"Berpindah ke RPC baru: {active_rpc_url}" + Style.RESET_ALL)
+            animated_print(f"Berpindah ke RPC baru: {active_rpc_url}", color=Fore.CYAN)
     else:
-        print(Fore.GREEN + f"Koneksi tetap stabil dengan RPC: {active_rpc_url}" + Style.RESET_ALL)
+        animated_print(f"Koneksi tetap stabil dengan RPC: {active_rpc_url}", color=Fore.GREEN)
 
-# Replace with your actual private key and address
-private_key = "private key"  # Ganti dengan private key
-my_address = Web3.to_checksum_address("wallet address")  # Alamat dompet Anda
+# Ganti dengan private key dan alamat dompet Anda
+private_key = "isi private key"  # Ganti dengan private key
+my_address = Web3.to_checksum_address("isi wallet address")  # Alamat dompet Anda
 
 weth_contract_address = Web3.to_checksum_address("0xA51894664A773981C6C112C43ce576f315d5b1B6")
 
@@ -103,11 +96,11 @@ weth_abi = '''
 
 weth_contract = web3.eth.contract(address=weth_contract_address, abi=weth_abi)
 
-# Define gas prices at the top of your script
-gas_price_wrap_gwei = 0.175  # Adjust as needed
-gas_price_unwrap_gwei = 0.142  # Adjust as needed
+# Tentukan harga gas di awal skrip
+gas_price_wrap_gwei = 0.18  # Sesuaikan sesuai kebutuhan
+gas_price_unwrap_gwei = 0.165  # Sesuaikan sesuai kebutuhan
 
-# Convert to Wei for use in transactions
+# Konversi ke Wei untuk digunakan dalam transaksi
 max_priority_fee_per_gas_wrap = web3.to_wei(gas_price_wrap_gwei, 'gwei')
 max_fee_per_gas_wrap = web3.to_wei(gas_price_wrap_gwei, 'gwei')
 
@@ -117,20 +110,20 @@ max_fee_per_gas_unwrap = web3.to_wei(gas_price_unwrap_gwei, 'gwei')
 # Tambahkan panggilan check_connection sebelum semua operasi terkait web3
 
 def get_random_amount():
-    """Generate a random amount between 0.01 and 0.011 ETH."""
+    """Menghasilkan jumlah acak antara 0.01 dan 0.011 ETH."""
     return web3.to_wei(random.uniform(0.173654, 0.173674), 'ether')
 
 
 def check_eth_balance():
     balance = web3.eth.get_balance(my_address)
     eth_balance = web3.from_wei(balance, 'ether')
-    print(Fore.MAGENTA + f"Saldo ETH: {eth_balance:.6f} ETH" + Style.RESET_ALL)  # Magenta
+    animated_print(f"Saldo ETH: {eth_balance:.6f} ETH", color=Fore.MAGENTA)
     return balance
 
 def check_weth_balance():
     balance = weth_contract.functions.balanceOf(my_address).call()
     weth_balance = web3.from_wei(balance, 'ether')
-    print(Fore.MAGENTA + f"Saldo WETH: {weth_balance:.6f} WETH" + Style.RESET_ALL)  # Magenta
+    animated_print(f"Saldo WETH: {weth_balance:.6f} WETH", color=Fore.MAGENTA)
     return balance
 
 
@@ -145,24 +138,24 @@ def has_sufficient_balance(amount_in_wei, is_wrap=True, max_priority_fee_per_gas
             gas_estimate = weth_contract.functions.withdraw(amount_in_wei).estimate_gas({'from': my_address})
 
         total_cost = max_priority_fee_per_gas * gas_estimate
-        # Check ETH or WETH balance based on transaction type
+        # Periksa saldo ETH atau WETH berdasarkan jenis transaksi
         if is_wrap:
             eth_balance = check_eth_balance()
             if eth_balance >= total_cost:
-                print(Fore.GREEN + f"Sufficient ETH Balance. Required: {web3.from_wei(total_cost, 'ether')} ETH" + Style.RESET_ALL)
+                animated_print(f"Saldo ETH cukup. Dibutuhkan: {web3.from_wei(total_cost, 'ether')} ETH", color=Fore.GREEN)
                 return True
             else:
-                print(Fore.YELLOW + f"Insufficient funds. Balance: {web3.from_wei(eth_balance, 'ether')} ETH, Required: {web3.from_wei(total_cost, 'ether')} ETH" + Style.RESET_ALL)
+                animated_print(f"Saldo tidak cukup. Saldo: {web3.from_wei(eth_balance, 'ether')} ETH, Dibutuhkan: {web3.from_wei(total_cost, 'ether')} ETH", color=Fore.RED)
         else:
             weth_balance = check_weth_balance()
             if weth_balance >= amount_in_wei:
-                print(Fore.GREEN + f"Sufficient WETH Balance. Required: {web3.from_wei(amount_in_wei, 'ether')} WETH" + Style.RESET_ALL)
+                animated_print(f"Saldo WETH cukup. Dibutuhkan: {web3.from_wei(amount_in_wei, 'ether')} WETH", color=Fore.GREEN)
                 return True
             else:
-                print(Fore.YELLOW + f"Insufficient funds. Balance: {web3.from_wei(weth_balance, 'ether')} WETH, Required: {web3.from_wei(amount_in_wei, 'ether')} WETH" + Style.RESET_ALL)
+                animated_print(f"Saldo tidak cukup. Saldo: {web3.from_wei(weth_balance, 'ether')} WETH, Dibutuhkan: {web3.from_wei(amount_in_wei, 'ether')} WETH", color=Fore.RED)
         return False
     except Exception as e:
-        print(Fore.RED + f"Error estimating gas: {e}" + Style.RESET_ALL)
+        animated_print(f"Kesalahan dalam estimasi gas: {e}", color=Fore.RED)
         return False
 
 
@@ -174,20 +167,20 @@ def wait_for_confirmation(tx_hash, timeout=300):
         try:
             # Periksa koneksi secara berkala, ganti RPC jika perlu
             if not web3.is_connected():
-                print(Fore.RED + f"Koneksi terputus dengan RPC: {active_rpc_url}. Mencoba RPC lain..." + Style.RESET_ALL)
+                animated_print(f"Koneksi terputus dengan RPC: {active_rpc_url}. Mencoba RPC lain...", color=Fore.YELLOW)
                 previous_rpc = active_rpc_url
                 web3, active_rpc_url = get_connected_web3()
-                print(Fore.CYAN + f"Berpindah ke RPC baru: {active_rpc_url}" + Style.RESET_ALL)
-            
+                animated_print(f"Berpindah ke RPC baru: {active_rpc_url}", color=Fore.CYAN)
+
             # Coba ambil receipt transaksi
             receipt = web3.eth.get_transaction_receipt(tx_hash)
             if receipt:
                 if receipt['status'] == 1:
-                    print(Fore.GREEN + f"Transaction Successful | Tx Hash: {web3.to_hex(tx_hash)} | Network: Taiko" + Style.RESET_ALL)
-                    print(f"Transaction execution time: {int(time.time() - start_time)} seconds")  # Menampilkan waktu eksekusi dalam detik
+                    animated_print(f"Transaksi Sukses | Tx Hash: {web3.to_hex(tx_hash)} | Jaringan: Taiko", color=Fore.GREEN)
+                    animated_print(f"Waktu eksekusi transaksi: {int(time.time() - start_time)} detik", color=Fore.GREEN)  # Menampilkan waktu eksekusi dalam detik
                     return True
                 else:
-                    print(Fore.RED + f"Transaction Failed | Tx Hash: {web3.to_hex(tx_hash)}" + Style.RESET_ALL)
+                    animated_print(f"Transaksi Gagal | Tx Hash: {web3.to_hex(tx_hash)}", color=Fore.RED)
                     return False
 
         except Exception:
@@ -196,23 +189,23 @@ def wait_for_confirmation(tx_hash, timeout=300):
         # Hitung waktu tersisa dan tampilkan countdown dalam detik
         remaining_time = timeout - (time.time() - start_time)  # Waktu tersisa dalam detik
         if remaining_time > 0:
-            sys.stdout.write(f"\r{Fore.YELLOW}Waiting for confirmation... {int(remaining_time)} seconds remaining...{Style.RESET_ALL}")
+            sys.stdout.write(f"\r{Fore.YELLOW}Menunggu konfirmasi... {int(remaining_time)} detik tersisa...") # Dengan warna
             sys.stdout.flush()
         else:
             break
 
         time.sleep(1)  # Tunggu 1 detik sebelum memeriksa lagi
 
-    print(Fore.RED + f"\nTimeout waiting for confirmation for Tx Hash: {web3.to_hex(tx_hash)}" + Style.RESET_ALL)
+    animated_print(f"\nWaktu habis menunggu konfirmasi untuk Tx Hash: {web3.to_hex(tx_hash)}", color=Fore.RED)
     return False
 
-def wrap_eth_to_weth():
-    amount_in_wei = get_random_amount()  # Get a random amount for wrapping
+def wrap_eth_to_weth(): 
+    amount_in_wei = get_random_amount()  # Mengambil jumlah acak untuk membungkus ETH
     if not has_sufficient_balance(amount_in_wei, is_wrap=True):
-        print(Fore.YELLOW + "Waiting for sufficient ETH balance..." + Style.RESET_ALL)  # Yellow
+        animated_print("Menunggu saldo ETH yang cukup...", color=Fore.YELLOW, delay=0.02)  # Dengan warna dan delay
         return False
 
-    print(Fore.YELLOW + f"Preparing to wrap: {web3.from_wei(amount_in_wei, 'ether')} ETH to WETH" + Style.RESET_ALL)  # Blue
+    animated_print(f"Mempersiapkan untuk membungkus: {web3.from_wei(amount_in_wei, 'ether')} ETH menjadi WETH", color=Fore.CYAN, delay=0.02)
 
     nonce = get_next_nonce()
     gas_estimate = weth_contract.functions.deposit(amount_in_wei).estimate_gas({'from': my_address, 'value': amount_in_wei})
@@ -224,33 +217,33 @@ def wrap_eth_to_weth():
         'maxPriorityFeePerGas': max_priority_fee_per_gas_wrap,
         'nonce': nonce,
         'value': amount_in_wei,
-        'data': '0xd0e30db0'  # Deposit function signature
+        'data': '0xd0e30db0'  # Signature fungsi deposit
     }
 
     signed_txn = web3.eth.account.sign_transaction(transaction, private_key)
     try:
         tx_hash = web3.eth.send_raw_transaction(signed_txn.raw_transaction)
-        print(Fore.BLUE + f"Transaction sent: Wrapping ETH to WETH | Amount: {web3.from_wei(amount_in_wei, 'ether')} WETH | Tx Hash: {web3.to_hex(tx_hash)} | Network: Taiko" + Style.RESET_ALL)  # Blue
+        animated_print(f"Transaksi terkirim: Membungkus ETH menjadi WETH | Jumlah: {web3.from_wei(amount_in_wei, 'ether')} WETH | Tx Hash: {web3.to_hex(tx_hash)} | Jaringan: Taiko", color=Fore.BLUE, delay=0.02)  # Dengan warna dan delay
         if wait_for_confirmation(tx_hash):
             check_connection()  # Pastikan koneksi tetap stabil setelah transaksi
             return True
     except Exception as e:
-        print(Fore.RED + f"Transaction error: {e}" + Style.RESET_ALL)  # Red
+        animated_print(f"Kesalahan transaksi: {e}", color=Fore.RED, delay=0.02)  # Dengan warna dan delay
     return False
 
 def unwrap_weth_to_eth():
-    amount_in_wei = get_random_amount()  # Get a random amount for unwrapping
+    amount_in_wei = get_random_amount()  # Mengambil jumlah acak untuk membuka WETH
     if not has_sufficient_balance(amount_in_wei, is_wrap=False):
-        print(Fore.YELLOW + "Waiting for sufficient WETH balance..." + Style.RESET_ALL)  # Yellow
+        animated_print("Menunggu saldo WETH yang cukup...", color=Fore.YELLOW, delay=0.02)  # Dengan warna dan delay
         return False
 
-    print(Fore.YELLOW + f"Preparing to unwrap: {web3.from_wei(amount_in_wei, 'ether')} WETH to ETH" + Style.RESET_ALL)  # Yellow
+    animated_print(f"Mempersiapkan untuk membuka: {web3.from_wei(amount_in_wei, 'ether')} WETH menjadi ETH", color=Fore.CYAN, delay=0.02)
 
     nonce = get_next_nonce()
     try:
         gas_estimate = weth_contract.functions.withdraw(amount_in_wei).estimate_gas({'from': my_address})
     except Exception as e:
-        print(Fore.RED + f"Error estimating gas: {e}" + Style.RESET_ALL)  # Red
+        animated_print(f"Kesalahan dalam estimasi gas: {e}", color=Fore.RED, delay=0.01)  # Dengan warna dan delay
         return False
 
     transaction = {
@@ -260,37 +253,37 @@ def unwrap_weth_to_eth():
         'maxFeePerGas': max_fee_per_gas_unwrap,
         'maxPriorityFeePerGas': max_priority_fee_per_gas_unwrap,
         'nonce': nonce,
-        'data': '0x2e1a7d4d' + amount_in_wei.to_bytes(32, 'big').hex()  # Withdraw function signature
+        'data': '0x2e1a7d4d' + amount_in_wei.to_bytes(32, 'big').hex()  # Signature fungsi withdraw
     }
 
     signed_txn = web3.eth.account.sign_transaction(transaction, private_key)
     try:
         tx_hash = web3.eth.send_raw_transaction(signed_txn.raw_transaction)
-        print(Fore.BLUE + f"Transaction sent: Unwrapping WETH to ETH | Amount: {web3.from_wei(amount_in_wei, 'ether')} ETH | Tx Hash: {web3.to_hex(tx_hash)} | Network: Taiko" + Style.RESET_ALL)  # Blue
+        animated_print(f"Transaksi terkirim: Membuka WETH menjadi ETH | Jumlah: {web3.from_wei(amount_in_wei, 'ether')} ETH | Tx Hash: {web3.to_hex(tx_hash)} | Jaringan: Taiko", color=Fore.BLUE, delay=0.02)  # Dengan warna dan delay
         
         # Menunggu konfirmasi transaksi dengan pengecekan koneksi
         if wait_for_confirmation(tx_hash):
             check_connection()  # Pastikan koneksi tetap stabil setelah transaksi
             return True
     except Exception as e:
-        print(Fore.RED + f"Transaction error: {e}" + Style.RESET_ALL)  # Red
+        animated_print(f"Kesalahan transaksi: {e}", color=Fore.RED, delay=0.02)  # Dengan warna dan delay
     return False
 
 def print_sleep_time(sleep_time):
-    """Print the sleep time and count down in milliseconds."""
-    print(Fore.BLUE + f"Sleeping for {sleep_time:.2f} seconds..." + Style.RESET_ALL)  # Blue
+    """Cetak waktu tidur dan hitung mundur dalam milidetik."""
+    animated_print(f"Tidur selama {sleep_time:.2f} detik...", color=Fore.YELLOW, delay=0.02)  # Dengan warna dan delay
     total_seconds = int(sleep_time)
     total_milliseconds = int((sleep_time - total_seconds) * 1000)  # Konversi sisa waktu ke milidetik
 
     for remaining in range(total_seconds, 0, -1):
         for millis in range(1000, 0, -100):  # Hitung mundur dalam milidetik
-            sys.stdout.write(f"\r{Fore.YELLOW}{remaining} seconds and {millis//100} milliseconds remaining...{Style.RESET_ALL}")  # Yellow
+            sys.stdout.write(f"\r{Fore.YELLOW}{remaining} detik dan {millis//100} milidetik tersisa...")  # Dengan warna
             sys.stdout.flush()
             time.sleep(0.1)  # Tunggu 100 milidetik untuk update tampilan
         remaining -= 1
     # Tampilkan milidetik terakhir jika ada
     if total_milliseconds > 0:
-        sys.stdout.write(f"\r{Fore.YELLOW}0 seconds and {total_milliseconds} milliseconds remaining...{Style.RESET_ALL}")
+        sys.stdout.write(f"\r{Fore.YELLOW}0 detik dan {total_milliseconds} milidetik tersisa...")  # Dengan warna
         sys.stdout.flush()
         time.sleep(total_milliseconds / 1000)  # Tunggu sisa milidetik terakhir
     print()  # Mencetak newline setelah countdown
@@ -303,33 +296,32 @@ try:
     while total_tx < 148:
         eth_balance = check_weth_balance()
 
-        # Wrap ETH to WETH
+        # Membungkus ETH menjadi WETH
         if wrap_counter < 74 and total_tx < 148:
             if wrap_eth_to_weth():
                 wrap_counter += 1
                 total_tx += 1
-                print(Fore.BLUE + f"Total Transactions: {total_tx} (Wrapping: {wrap_counter})" + Style.RESET_ALL)  # Blue
+                animated_print(f"Total Transaksi: {total_tx} (Membungkus: {wrap_counter})", color=Fore.CYAN, delay=0.02)  # Dengan warna dan delay
 
-        # Sleep untuk durasi acak antara transaksi
+        # Tidur untuk durasi acak antara transaksi
         sleep_time = random.uniform(12, 15)
         print_sleep_time(sleep_time)  # Memanggil fungsi countdown
 
         weth_balance = check_eth_balance()
 
-        # Unwrap WETH to ETH
+        # Membuka WETH menjadi ETH
         if unwrap_counter < 74 and total_tx < 148:
             if unwrap_weth_to_eth():
                 unwrap_counter += 1
                 total_tx += 1
-                print(Fore.BLUE + f"Total Transactions: {total_tx} (Unwrapping: {unwrap_counter})" + Style.RESET_ALL)  # Blue
+                animated_print(f"Total Transaksi: {total_tx} (Membuka: {unwrap_counter})", color=Fore.CYAN, delay=0.02)  # Dengan warna dan delay
 
-        # Sleep untuk durasi acak antara transaksi
+        # Tidur untuk durasi acak antara transaksi
         sleep_time = random.uniform(12, 15)
         print_sleep_time(sleep_time)  # Memanggil fungsi countdown
 
 except KeyboardInterrupt:
-    print(Fore.RED + "\nInterrupted by user." + Style.RESET_ALL)
+    animated_print("\nDihentikan oleh pengguna.", color=Fore.RED, delay=0.01)  # Dengan warna dan delay
 finally:
-    print(Fore.MAGENTA + f"Total Transactions: {total_tx} (Wrapping: {wrap_counter}, Unwrapping: {unwrap_counter})" + Style.RESET_ALL)
-    print(Fore.YELLOW + "Thank you tod!" + Style.RESET_ALL)
-    
+    animated_print(f"Total Transaksi: {total_tx} (Membungkus: {wrap_counter}, Membuka: {unwrap_counter})", color=Fore.MAGENTA, delay=0.02)  # Dengan warna dan delay
+    animated_print("Terima kasih tod!", color=Fore.YELLOW, delay=0.02)  # Dengan warna dan delay
