@@ -34,6 +34,10 @@ pip install web3
 ```shell
 pip install colorama
 ```
+## Next
+```shell
+pip install requests
+```
 ## Run taiko1 unwrap random time sleep, random amount
 ```shell
 python taiko1.py
@@ -46,3 +50,5 @@ python taiko2.py
 ```shell
 python taiko3.py
 ```
+```shell
+python taiko4.py
