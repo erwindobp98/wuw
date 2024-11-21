@@ -325,3 +325,4 @@ except KeyboardInterrupt:
 finally:
     animated_print(f"Total Transaksi: {total_tx} (Membungkus: {wrap_counter}, Membuka: {unwrap_counter})", color=Fore.MAGENTA, delay=0.02)  # Dengan warna dan delay
     animated_print("Terima kasih tod!", color=Fore.YELLOW, delay=0.02)  # Dengan warna dan delay
+
