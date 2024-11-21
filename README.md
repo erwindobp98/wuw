@@ -26,6 +26,10 @@ nano taiko2.py
 ```shell
 nano taiko3.py
 ```
+## Or
+```shell
+nano taiko4.py
+```
 ## Next
 ```shell
 pip install web3
