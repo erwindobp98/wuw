@@ -97,8 +97,8 @@ weth_abi = '''
 weth_contract = web3.eth.contract(address=weth_contract_address, abi=weth_abi)
 
 # Tentukan harga gas di awal skrip
-gas_price_wrap_gwei = 0.18  # Sesuaikan sesuai kebutuhan
-gas_price_unwrap_gwei = 0.165  # Sesuaikan sesuai kebutuhan
+gas_price_wrap_gwei = 0.137  # Sesuaikan sesuai kebutuhan
+gas_price_unwrap_gwei = 0.127  # Sesuaikan sesuai kebutuhan
 
 # Konversi ke Wei untuk digunakan dalam transaksi
 max_priority_fee_per_gas_wrap = web3.to_wei(gas_price_wrap_gwei, 'gwei')
@@ -479,11 +479,11 @@ unwrap_counter = 0
 total_tx = 0
 
 try:
-    while total_tx < 148:
+    while total_tx < 170:
         eth_balance = check_weth_balance()
 
         # Membungkus ETH menjadi WETH
-        if wrap_counter < 74 and total_tx < 148:
+        if wrap_counter < 85 and total_tx < 170:
             if wrap_eth_to_weth():
                 wrap_counter += 1
                 total_tx += 1
@@ -496,7 +496,7 @@ try:
         weth_balance = check_eth_balance()
 
         # Membuka WETH menjadi ETH
-        if unwrap_counter < 74 and total_tx < 148:
+        if unwrap_counter < 85 and total_tx < 170:
             if unwrap_weth_to_eth():
                 unwrap_counter += 1
                 total_tx += 1
