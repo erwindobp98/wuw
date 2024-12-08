@@ -61,8 +61,8 @@ weth_abi = '''
 weth_contract = web3.eth.contract(address=weth_contract_address, abi=weth_abi)
 
 # Define gas prices at the top of your script
-gas_price_wrap_gwei = 0.000001031  # Adjust as needed
-gas_price_unwrap_gwei = 0.000001031  # Adjust as needed
+gas_price_wrap_gwei = 0.00000123  # Adjust as needed
+gas_price_unwrap_gwei = 0.00000123  # Adjust as needed
 
 # Convert to Wei for use in transactions
 max_priority_fee_per_gas_wrap = web3.to_wei(gas_price_wrap_gwei, 'gwei')
