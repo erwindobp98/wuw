@@ -197,11 +197,6 @@ def claim_all_tasks(address):
         task_description = task["description"]
         task_claim(address, task_id, task_description, index, session)
 
-# Panggil fungsi klaim tugas
-try:
-    claim_all_tasks(my_address)
-except Exception as e:
-    print(Fore.RED + f"Error during task claiming: {e}" + Style.RESET_ALL)
 def has_sufficient_balance(amount_in_wei, is_wrap=True, max_priority_fee_per_gas=max_priority_fee_per_gas_wrap, max_fee_per_gas=max_fee_per_gas_wrap):
     try:
         if is_wrap:
@@ -379,3 +374,6 @@ except KeyboardInterrupt:
 finally:
     print(Fore.MAGENTA + f"Total Transactions: {total_tx} (Wrapping: {wrap_counter}, Unwrapping: {unwrap_counter})" + Style.RESET_ALL)
     print(Fore.YELLOW + "Thank you tod!" + Style.RESET_ALL)
+
+if __name__ == "__main__":
+    claim_all_tasks(my_address)
