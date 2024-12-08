@@ -372,8 +372,8 @@ try:
 except KeyboardInterrupt:
     print(Fore.RED + "\nInterrupted by user." + Style.RESET_ALL)
 finally:
+    claim_all_tasks(my_address)
     print(Fore.MAGENTA + f"Total Transactions: {total_tx} (Wrapping: {wrap_counter}, Unwrapping: {unwrap_counter})" + Style.RESET_ALL)
     print(Fore.YELLOW + "Thank you tod!" + Style.RESET_ALL)
 
-if __name__ == "__main__":
-    claim_all_tasks(my_address)
+    
