@@ -510,6 +510,5 @@ except KeyboardInterrupt:
     animated_print("\nDihentikan oleh pengguna.", color=Fore.RED, delay=0.01)  # Dengan warna dan delay
 finally:
     animated_print(f"Total Transaksi: {total_tx} (Membungkus: {wrap_counter}, Membuka: {unwrap_counter})", color=Fore.MAGENTA, delay=0.01)  # Dengan warna dan delay
-    
-if __name__ == "__main__":
     display_taiko_data(my_address)
+    
