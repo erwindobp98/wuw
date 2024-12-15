@@ -74,7 +74,7 @@ max_fee_per_gas_unwrap = web3.to_wei(gas_price_unwrap_gwei, 'gwei')
 
 def get_random_amount():
     """Generate a random amount between 0.01 and 0.011 ETH."""
-    return web3.to_wei(random.uniform(0.000019, 0.00002), 'ether')
+    return web3.to_wei(random.uniform(0.00019, 0.0002), 'ether')
 
 def check_eth_balance():
     balance = web3.eth.get_balance(my_address)
