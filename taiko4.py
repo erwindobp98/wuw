@@ -18,13 +18,12 @@ def animated_print(text, color=Fore.WHITE, delay=0.01):
 
 # Daftar RPC Taiko
 taiko_rpc_list = [
+    "https://taiko-rpc.publicnode.com",
+    "https://rpc.taiko.tools",
     "https://rpc.ankr.com/taiko",
     "https://rpc.taiko.xyz",
-    "wss://taiko-rpc.publicnode.com",
     "https://rpc.mainnet.taiko.xyz",
     "https://taiko.drpc.org",
-    "wss://taiko.drpc.org",
-    "https://rpc.taiko.tools" 
 ]
 
 def get_connected_web3():
