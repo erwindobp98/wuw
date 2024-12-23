@@ -486,7 +486,7 @@ try:
             if wrap_eth_to_weth():
                 wrap_counter += 1
                 total_tx += 1
-                animated_print(f"Total Transaksi: {total_tx} (Membungkus: {wrap_counter})", color=Fore.CYAN, delay=0.01)  # Dengan warna dan delay
+                animated_print(f"Total Transaksi: {total_tx} (wrap: {wrap_counter})", color=Fore.CYAN, delay=0.01)  # Dengan warna dan delay
 
         # Tidur untuk durasi acak antara transaksi
         sleep_time = random.uniform(12, 15)
@@ -499,7 +499,7 @@ try:
             if unwrap_weth_to_eth():
                 unwrap_counter += 1
                 total_tx += 1
-                animated_print(f"Total Transaksi: {total_tx} (Membuka: {unwrap_counter})", color=Fore.CYAN, delay=0.01)  # Dengan warna dan delay
+                animated_print(f"Total Transaksi: {total_tx} (unwrap: {unwrap_counter})", color=Fore.CYAN, delay=0.01)  # Dengan warna dan delay
 
         # Tidur untuk durasi acak antara transaksi
         sleep_time = random.uniform(12, 15)
@@ -508,6 +508,6 @@ try:
 except KeyboardInterrupt:
     animated_print("\nDihentikan oleh pengguna.", color=Fore.RED, delay=0.01)  # Dengan warna dan delay
 finally:
-    animated_print(f"Total Transaksi: {total_tx} (Membungkus: {wrap_counter}, Membuka: {unwrap_counter})", color=Fore.MAGENTA, delay=0.01)  # Dengan warna dan delay
+    animated_print(f"Total Transaksi: {total_tx} (wrap: {wrap_counter}, unwrap: {unwrap_counter})", color=Fore.MAGENTA, delay=0.01)  # Dengan warna dan delay
     display_taiko_data(my_address)
     
