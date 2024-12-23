@@ -175,11 +175,11 @@ def wait_for_confirmation(tx_hash, timeout=300):
             receipt = web3.eth.get_transaction_receipt(tx_hash)
             if receipt:
                 if receipt['status'] == 1:
-                    animated_print(f"Transaksi Sukses | Tx Hash: {web3.to_hex(tx_hash)} | Jaringan: Taiko", color=Fore.GREEN)
+                    animated_print(f"Transaksi Sukses | Tx Hash: https://taikoscan.io/tx/{web3.to_hex(tx_hash)} | Jaringan: Taiko", color=Fore.GREEN)
                     animated_print(f"Waktu eksekusi transaksi: {int(time.time() - start_time)} detik", color=Fore.GREEN)  # Menampilkan waktu eksekusi dalam detik
                     return True
                 else:
-                    animated_print(f"Transaksi Gagal | Tx Hash: {web3.to_hex(tx_hash)}", color=Fore.RED)
+                    animated_print(f"Transaksi Gagal | Tx Hash: https://taikoscan.io/tx/{web3.to_hex(tx_hash)}", color=Fore.RED)
                     return False
 
         except Exception:
@@ -195,7 +195,7 @@ def wait_for_confirmation(tx_hash, timeout=300):
 
         time.sleep(1)  # Tunggu 1 detik sebelum memeriksa lagi
 
-    animated_print(f"\nWaktu habis menunggu konfirmasi untuk Tx Hash: {web3.to_hex(tx_hash)}", color=Fore.RED)
+    animated_print(f"\nWaktu habis menunggu konfirmasi untuk Tx Hash: https://taikoscan.io/tx/{web3.to_hex(tx_hash)}", color=Fore.RED)
     return False
 
 def calculate_gas_fee(gas_used, gas_price_gwei):
@@ -408,7 +408,7 @@ def wrap_eth_to_weth():
     signed_txn = web3.eth.account.sign_transaction(transaction, private_key)
     try:
         tx_hash = web3.eth.send_raw_transaction(signed_txn.raw_transaction)
-        animated_print(f"Transaksi terkirim: Membungkus ETH menjadi WETH | Jumlah: {web3.from_wei(amount_in_wei, 'ether')} WETH | Tx Hash: {web3.to_hex(tx_hash)} | Jaringan: Taiko", color=Fore.BLUE, delay=0.01)  # Dengan warna dan delay
+        animated_print(f"Transaksi terkirim: wrap ETH menjadi WETH | Jumlah: {web3.from_wei(amount_in_wei, 'ether')} WETH | Tx Hash: https://taikoscan.io/tx/{web3.to_hex(tx_hash)} | Jaringan: Taiko", color=Fore.BLUE, delay=0.01)  # Dengan warna dan delay
         if wait_for_confirmation(tx_hash):
             check_connection()  # Pastikan koneksi tetap stabil setelah transaksi
             return True
@@ -444,7 +444,7 @@ def unwrap_weth_to_eth():
     signed_txn = web3.eth.account.sign_transaction(transaction, private_key)
     try:
         tx_hash = web3.eth.send_raw_transaction(signed_txn.raw_transaction)
-        animated_print(f"Transaksi terkirim: Membuka WETH menjadi ETH | Jumlah: {web3.from_wei(amount_in_wei, 'ether')} ETH | Tx Hash: {web3.to_hex(tx_hash)} | Jaringan: Taiko", color=Fore.BLUE, delay=0.01)  # Dengan warna dan delay
+        animated_print(f"Transaksi terkirim: unwrap WETH menjadi ETH | Jumlah: {web3.from_wei(amount_in_wei, 'ether')} ETH | Tx Hash: https://taikoscan.io/tx/{web3.to_hex(tx_hash)} | Jaringan: Taiko", color=Fore.BLUE, delay=0.01)  # Dengan warna dan delay
         
         # Menunggu konfirmasi transaksi dengan pengecekan koneksi
         if wait_for_confirmation(tx_hash):
