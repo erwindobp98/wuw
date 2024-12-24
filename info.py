@@ -162,13 +162,13 @@ def display_taiko_data(address):
             animated_print(f"Jumlah Tx Hari Ini           : {transaction_data['tx_count_today']} transaksi", color=Fore.GREEN, delay=0.02)
         
         if 'adjusted_gas_fee_eth_from_sep16' in transaction_data:
-            animated_print(f"Total Gas Fee ETH TAIKO S2   : {transaction_data['adjusted_gas_fee_eth_from_sep16']:.10f} ETH", color=Fore.BLUE, delay=0.02)
+            animated_print(f"Total Gas Fee ETH TAIKO S3   : {transaction_data['adjusted_gas_fee_eth_from_sep16']:.10f} ETH", color=Fore.BLUE, delay=0.02)
         
         if 'total_gas_fee_usd_from_sep16' in transaction_data:
-            animated_print(f"Total Gas Fee USD TAIKO S2   : ${transaction_data['total_gas_fee_usd_from_sep16']:.2f}", color=Fore.BLUE, delay=0.02)
+            animated_print(f"Total Gas Fee USD TAIKO S3   : ${transaction_data['total_gas_fee_usd_from_sep16']:.2f}", color=Fore.BLUE, delay=0.02)
         
         if 'tx_count_from_sep16' in transaction_data:
-            animated_print(f"Jumlah Tx TAIKO S2           : {transaction_data['tx_count_from_sep16']} transaksi", color=Fore.GREEN, delay=0.02)
+            animated_print(f"Jumlah Tx TAIKO S3           : {transaction_data['tx_count_from_sep16']} transaksi", color=Fore.GREEN, delay=0.02)
 
     if rank_data:
         rank = rank_data.get('rank', 'N/A')
